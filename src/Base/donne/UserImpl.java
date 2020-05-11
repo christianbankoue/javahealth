@@ -11,4 +11,3 @@ public class UserImpl implements IUser{
         return null;
     }
 }
-}
