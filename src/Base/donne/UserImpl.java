@@ -8,7 +8,7 @@ public class UserImpl implements IUser{
     public User getConnection(String email, String password) {
         User user = null;
         String sql = "S";
-        return null;
+        return user;
     }
 }
 }
