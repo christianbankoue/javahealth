@@ -13,9 +13,9 @@ public class DB {
     private int ok;
 
     private void getConnection(){
-        String url = "jdbc:mysql://localhost:3306/gestionConsult";
+        String url = "jdbc:mysql://localhost:3306/gestionconsult";
         String user = "root";
-        String password = "Pappa@2098";
+        String password = "";
         try {
             Class.forName("com.mysql.jdbc.Driver");
             cnx = DriverManager.getConnection(url,user,password);
@@ -33,7 +33,7 @@ public class DB {
             getConnection();
             pstm = cnx.prepareStatement(sql);
         }catch (Exception ex){
-            ex.printStackTrace();;
+            ex.printStackTrace();
         }
     }
 

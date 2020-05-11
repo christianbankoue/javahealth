@@ -7,8 +7,8 @@ public class UserImpl implements IUser{
     @Override
     public User getConnection(String email, String password) {
         User user = null;
-        String sql = "S";
-        return null;
+        String sql = "$";
+        return user;
     }
 }
-}
+
