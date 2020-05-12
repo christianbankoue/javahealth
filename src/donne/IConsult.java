@@ -1,4 +1,4 @@
-package Base.donne;
+package donne;
 
 import sample.Consultation;
 

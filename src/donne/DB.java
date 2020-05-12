@@ -1,4 +1,4 @@
-package Base.donne;
+package donne;
 
 import java.sql.*;
 
@@ -15,9 +15,9 @@ public class DB {
     private void getConnection(){
         String url = "jdbc:mysql://localhost:3306/gestionConsult";
         String user = "root";
-        String password = "Pappa@2098";
+        String password = "";
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             cnx = DriverManager.getConnection(url,user,password);
 
         }
