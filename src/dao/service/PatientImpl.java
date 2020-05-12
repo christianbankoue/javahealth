@@ -1,8 +1,9 @@
-package donne;
+package dao.service;
 
-import sample.Patient;
+import Domaine.Patient;
+import dao.service.serviceI.IPatient;
 
-public class PatientImpl  implements IPatient{
+public class PatientImpl  implements IPatient {
 
 
     @Override

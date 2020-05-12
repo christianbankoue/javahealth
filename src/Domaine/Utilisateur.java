@@ -1,14 +1,13 @@
-package sample;
+package Domaine;
 
-public class Medecin {
-    private int id;
+public class Utilisateur {
+    protected int id;
     private String name;
     private String prenom;
     private String email;
     private String password;
+    private String codeu;
 
-    public Medecin() {
-    }
 
     public int getId() {
         return id;
@@ -16,6 +15,14 @@ public class Medecin {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getCodeu() {
+        return codeu;
+    }
+
+    public void setCodeu(String codeu) {
+        this.codeu = codeu;
     }
 
     public String getName() {

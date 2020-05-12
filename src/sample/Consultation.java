@@ -1,5 +1,8 @@
 package sample;
 
+import Domaine.Medecin;
+import Domaine.Patient;
+
 public class Consultation {
     private int id;
     private String password;

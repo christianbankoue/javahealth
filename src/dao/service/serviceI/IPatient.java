@@ -1,6 +1,6 @@
-package donne;
+package dao.service.serviceI;
 
-import sample.Patient;
+import Domaine.Patient;
 
 public interface IPatient {
     public int add(Patient patient);

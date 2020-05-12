@@ -1,5 +1,6 @@
-package donne;
+package dao.service;
 
+import dao.service.serviceI.IConsult;
 import sample.Consultation;
 
 import java.util.List;

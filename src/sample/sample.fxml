@@ -8,32 +8,65 @@
    <children>
       <AnchorPane prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: grey;">
          <children>
-            <Label layoutX="253.0" layoutY="74.0" text="USER LOGIN">
+
+            <FlowPane layoutX="201.0" layoutY="132.0" prefHeight="32.0" prefWidth="300.0" style="-fx-background-color: grey; -fx-border-radius: 5px; -fx-border-color: red;">
+               <children>
+                  <TextField fx:id="nametxt" prefHeight="30.0" prefWidth="298.0" promptText="Surname" />
+               </children>
+
+            </FlowPane>
+
+            <FlowPane layoutX="199.0" layoutY="177.0" prefHeight="32.0" prefWidth="300.0" style="-fx-background-color: grey; -fx-border-color: red; -fx-border-radius: 5px;">
+               <children>
+                  <TextField fx:id="prenomtxt" prefHeight="32.0" prefWidth="300.0" promptText="Firstname" />
+               </children>
+            </FlowPane>
+
+            <FlowPane layoutX="199.0" layoutY="227.0" prefHeight="32.0" prefWidth="300.0" style="-fx-background-color: grey; -fx-border-color: red; -fx-border-radius: 5px;">
+               <children>
+                  <TextField fx:id="emailtxt" prefHeight="32.0" prefWidth="300.0" promptText="Enter your email" />
+               </children></FlowPane>
+            <FlowPane layoutX="199.0" layoutY="273.0" prefHeight="32.0" prefWidth="300.0" style="-fx-background-color: grey; -fx-border-color: red; -fx-border-radius: 5px;">
+               <children>
+                  <PasswordField fx:id="passwordtxt" prefHeight="32.0" prefWidth="300.0" promptText="Password" />
+               </children>
+            </FlowPane>
+            <Label layoutX="84.0" layoutY="228.0" prefHeight="32.0" prefWidth="107.0" text="Email ">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="84.0" layoutY="275.0" prefHeight="30.0" prefWidth="107.0" text="Mot de passe">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Button layoutX="305.0" layoutY="378.0" mnemonicParsing="false" onAction="#SignUp" prefHeight="26.0" prefWidth="89.0" style="-fx-background-color: darkgreen;" text="SIGN UP" textFill="#fcf0f7" />
+
+
+            <Label layoutX="84.0" layoutY="134.0" prefHeight="30.0" prefWidth="90.0" text="Nom">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="84.0" layoutY="179.0" prefHeight="30.0" prefWidth="107.0" text="Prenom">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="84.0" layoutY="320.0" prefHeight="27.0" prefWidth="107.0" text="Code U">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="codeutxt" layoutX="201.0" layoutY="316.0" prefHeight="32.0" prefWidth="200.0" promptText="U code" style="-fx-border-color: red; -fx-border-radius: 5px;" />
+            <Label layoutX="257.0" layoutY="51.0" text="SIGN UP">
                <font>
                   <Font size="35.0" />
                </font>
             </Label>
-            <FlowPane layoutX="193.0" layoutY="201.0" prefHeight="32.0" prefWidth="300.0" style="-fx-background-color: grey; -fx-border-color: red;">
-               <children>
-                  <TextField fx:id="emailtxt" prefHeight="32.0" prefWidth="300.0" text="Email" />
-               </children></FlowPane>
-            <FlowPane layoutX="193.0" layoutY="280.0" prefHeight="32.0" prefWidth="300.0" style="-fx-background-color: grey; -fx-border-color: red;">
-               <children>
-                  <PasswordField fx:id="passwordtxt" prefHeight="32.0" prefWidth="300.0" text="PASSWORD" />
-               </children>
-            </FlowPane>
-            <Label layoutX="193.0" layoutY="170.0" prefHeight="18.0" prefWidth="130.0" text="Email address">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="193.0" layoutY="250.0" prefHeight="30.0" prefWidth="106.0" text="Password">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Button layoutX="299.0" layoutY="397.0" mnemonicParsing="false" onAction="#getLogin" prefHeight="26.0" prefWidth="89.0" style="-fx-background-color: darkblue;" text="LOG IN" />
-            <CheckBox layoutX="396.0" layoutY="336.0" mnemonicParsing="false" text="Remember me" />
+            <Label layoutX="84.0" layoutY="443.0" text="Etes-vous deja inscrit ?" />
+            <Button layoutX="214.0" layoutY="439.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="66.0" style="-fx-background-color: darkgreen;" text="Log in" textFill="#fdeeee" />
          </children>
       </AnchorPane>
    </children>

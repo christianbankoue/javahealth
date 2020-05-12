@@ -1,11 +1,12 @@
-package donne;
+package dao.service;
 
+import dao.service.serviceI.IMedecin;
 import sample.Consultation;
-import sample.Medecin;
+import Domaine.Medecin;
 
 import java.util.List;
 
-public class MedecinImpl implements IMedecin{
+public class MedecinImpl implements IMedecin {
     @Override
     public List<Consultation> getConsultMedecin(int id) {
         return null;
