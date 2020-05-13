@@ -1,4 +1,4 @@
-package sample;
+package application;
 
 import dao.basededonne.DB;
 import model.UserCompte;

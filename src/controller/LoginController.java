@@ -1,4 +1,4 @@
-package sample;
+package controller;
 
 import dao.service.UserServiceImp;
 import javafx.event.ActionEvent;
