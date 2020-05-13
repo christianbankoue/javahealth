@@ -1,7 +1,7 @@
 package dao.service;
 
 import dao.service.serviceI.IConsult;
-import sample.Consultation;
+import model.Consultation;
 
 import java.util.List;
 

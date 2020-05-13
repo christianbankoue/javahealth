@@ -1,8 +1,8 @@
 package dao.service;
 
 import dao.service.serviceI.IMedecin;
-import sample.Consultation;
-import Domaine.Medecin;
+import model.Consultation;
+import model.Utilisateur;
 
 import java.util.List;
 
@@ -13,17 +13,17 @@ public class MedecinImpl implements IMedecin {
     }
 
     @Override
-    public Medecin get(int id) {
+    public Utilisateur get(int id) {
         return null;
     }
 
     @Override
-    public int add(Medecin medecin) {
+    public int add(Utilisateur medecin) {
         return 0;
     }
 
     @Override
-    public int delecte(Medecin medecin) {
+    public int del(Utilisateur medecin) {
         return 0;
     }
 }

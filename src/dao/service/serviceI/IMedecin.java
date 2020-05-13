@@ -1,13 +1,13 @@
 package dao.service.serviceI;
 
-import sample.Consultation;
-import Domaine.Medecin;
+import model.Consultation;
+import model.Utilisateur;
 
 import java.util.List;
 
 public interface IMedecin {
     public List<Consultation> getConsultMedecin(int id);
-    public Medecin get(int id);
-    public int add(Medecin medecin);
-    public int del(Medecin medecin);
+    public Utilisateur get(int id);
+    public int add(Utilisateur medecin);
+    public int del(Utilisateur medecin);
 }

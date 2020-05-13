@@ -13,7 +13,7 @@ public class DB {
     private int ok;
 
     private void getConnection(){
-        String url = "jdbc:mysql://localhost:3306/connexion";
+        String url = "jdbc:mysql://localhost:3306/gestionconsult";
         String user = "root";
         String password = "";
         try {

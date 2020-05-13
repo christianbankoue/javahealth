@@ -1,6 +1,6 @@
 package dao.service.serviceI;
 
-import sample.Consultation;
+import model.Consultation;
 
 import java.util.List;
 
