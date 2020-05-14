@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="761.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <MenuBar prefWidth="716.0" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Acceuil" />
+          <Menu mnemonicParsing="false" text="Programmer une consulation " />
+          <Menu mnemonicParsing="false" text="Ajouter une consultation" />
+            <Menu mnemonicParsing="false" text="Liberer une recette" />
+            <Menu mnemonicParsing="false" text="Log out">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Action 1" />
+              </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: skyblue;" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
