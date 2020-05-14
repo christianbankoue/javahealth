@@ -2,13 +2,13 @@ package controller;
 
 import dao.service.UserServiceImp;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.UserCompte;
@@ -107,7 +107,7 @@ public class LoginController implements Initializable {
 
                 Stage gestionconsultaionStage = new Stage();
                 FXMLLoader loader = new FXMLLoader();
-                Pane root = loader.load(getClass().getResource("gestionconsultaion.fxml").openStream());
+                Pane root = loader.load(getClass().getResource("./../vue/gestionconsultaion.fxml").openStream());
 
                 GestionConsultaionController gcc =  (GestionConsultaionController)loader.getController();
                 gcc.injectUtilisateur(utilisateur);
