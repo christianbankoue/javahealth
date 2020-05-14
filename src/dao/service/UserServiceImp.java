@@ -15,7 +15,7 @@ public class UserServiceImp implements IUserService {
 
     public int signUp(UserCompte userCompte){
 
-        String sql = "INSERT INTO USERCOMPTES (name, prenom, email, password, codeunique, role_id, role) values (?,?,?,?,?,?,?) ";
+        String sql = "INSERT INTO USERCOMPTES (name, prenom, email, password, codeunique, role_id) values (?,?,?,?,?,?) ";
 
         try{
             db.initPrepar(sql);
@@ -25,14 +25,14 @@ public class UserServiceImp implements IUserService {
             pstm.setString(3,userCompte.getEmail());
             pstm.setString(4,userCompte.getPassword());
             pstm.setString(5,userCompte.getCodeUnique());
-            pstm.setString(7,userCompte.getRoles());
+
 
 
 
             if(userCompte.isAdmin()){
                 pstm.setInt(6, RoleEnum.ADMIN.getIdentifiant());
 
-            }else if(userCompte.isMedecin() || userCompte.isAssistant() || userCompte.isInfirmier() ){
+            }else if(userCompte.isPersonnelmedicale() ){
                 pstm.setInt(6, RoleEnum.PERSONNEL_MEDICAL.getIdentifiant());
 
             }else if(userCompte.isFournisseur()){
@@ -46,6 +46,7 @@ public class UserServiceImp implements IUserService {
 
             }
 
+
             int rs = db.executeMaj();
             return rs;
         }
@@ -55,7 +56,7 @@ public class UserServiceImp implements IUserService {
         return 0;
     }
 
-    public Utilisateur login(String name, String prenom, String email, String password, String roles ){
+    public Utilisateur login(String name, String prenom, String email, String password){
 
         String sql = "SELECT usercompte_id, codeUnique, role_id FROM USERCOMPTES WHERE name = ? and prenom = ? and email = ? and password = ? ";
 
@@ -67,7 +68,6 @@ public class UserServiceImp implements IUserService {
             pstm.setString(3, email);
             pstm.setString(4, password);
             // pstm.setString(5, codeUnique);
-            pstm.setString(6,roles);
             ResultSet rs = db.executeSelect();
             //int id, String name, String prenom, String email, String password, String codeUnique
             Utilisateur utilisateur;
@@ -76,7 +76,7 @@ public class UserServiceImp implements IUserService {
                 String codeUnique = rs.getString("codeUnique");
                 int roleId = rs.getInt("role_id");
 
-                utilisateur = new Utilisateur(id, name, prenom, email, password, codeUnique, roles);
+                utilisateur = new Utilisateur(id, name, prenom, email, password, codeUnique);
                 utilisateur.setRole(RoleEnum.getRoleById(roleId));
                 return utilisateur;
             }

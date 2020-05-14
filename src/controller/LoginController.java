@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.UserCompte;
 import model.Utilisateur;
+import model.enums.RoleEnum;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,31 +33,10 @@ public class LoginController implements Initializable {
     @FXML
     private TextField codeutxt;
     @FXML
-    private TextField screen;
-    @FXML
-    private void medecin(ActionEvent event){
-        screen.setText("medecin");
-    }
+    private TextField role;
 
-    @FXML
-    private void assistant(ActionEvent event){
-        screen.setText("Assistant");
-    }
-    @FXML
-    private void infirmier(ActionEvent event){
-        screen.setText("Infirmier");
-    }
-    @FXML
-    private void patient(ActionEvent event){
-        screen.setText("Patient");
-    }
-    @FXML
-    private void pharmacien(ActionEvent event){
-        screen.setText("Pharamcien");
-    }    @FXML
-    private void fournisseur(ActionEvent event){
-        screen.setText("Fournisseur");
-    }
+    private RoleEnum roleEnum = RoleEnum.INEXISTANT;
+
 
 
 
@@ -68,14 +48,43 @@ public class LoginController implements Initializable {
 
     }
 
+    @FXML
+    private void medecin(ActionEvent event){
+        role.setText("medecin");
+        roleEnum = RoleEnum.PERSONNEL_MEDICAL;
+    }
 
+    @FXML
+    private void assistant(ActionEvent event){
+        role.setText("Assistant");
+        roleEnum = RoleEnum.PERSONNEL_MEDICAL;
+    }
+    @FXML
+    private void infirmier(ActionEvent event){
+        role.setText("Infirmier");
+        roleEnum= RoleEnum.PERSONNEL_MEDICAL;
+    }
+    @FXML
+    private void patient(ActionEvent event){
+        role.setText("Patient");
+    roleEnum = RoleEnum.PATIENT;
+    }
+    @FXML
+    private void pharmacien(ActionEvent event){
+        role.setText("Pharamcien");
+        roleEnum = RoleEnum.PHARMACIEN;
+    }    @FXML
+    private void fournisseur(ActionEvent event){
+        role.setText("Fournisseur");
+        roleEnum = RoleEnum.FOURNISSEUR;
+    }
 
     public void login(ActionEvent event){
         String name =  nametxt.getText();
         String prenom = prenomtxt.getText();
         String email = emailtxt.getText();
         String password = passwordtxt.getText();
-        String roles = screen.getText();
+
 
 
 //        String params = email+ "   " + password;
@@ -88,7 +97,7 @@ public class LoginController implements Initializable {
 
         UserServiceImp userService = new UserServiceImp();
 
-        Utilisateur utilisateur = userService.login(name, prenom, email, password,roles);
+        Utilisateur utilisateur = userService.login(name, prenom, email, password);
 
         System.out.println(utilisateur);
 
@@ -123,11 +132,24 @@ public class LoginController implements Initializable {
         String email = emailtxt.getText();
         String password = passwordtxt.getText();
         String codeUnique = codeutxt.getText();
-        String roles = screen.getText();
+        String roleUtilisateur  = role.getText();
 
-        String params = name+ "   " + prenom+ "   " + email+ "   " + password+ "  "+ codeUnique+ "  "+roles;
 
-        UserCompte userCompte = new UserCompte(name, prenom, email, password, codeUnique,roles);
+        String params = name+ "   " + prenom+ "   " + email+ "   " + password+ "  "+ codeUnique+ "  "+ roleUtilisateur ;
+
+        UserCompte userCompte = new UserCompte(name, prenom, email, password, codeUnique);
+
+        if (roleEnum.getIdentifiant()== 1)
+            userCompte.setAdmin(true);
+        else if(roleEnum.getIdentifiant() == 2 )
+            userCompte.setPersonnelmedicale(true);
+        else if(roleEnum.getIdentifiant() == 3 )
+            userCompte.setFournisseur(true);
+        else if(roleEnum.getIdentifiant() == 4 )
+            userCompte.setPharmatien(true);
+        else if(roleEnum.getIdentifiant() == 5 )
+            userCompte.setPatient(true);
+
 
         UserServiceImp userService = new UserServiceImp();
 
@@ -135,7 +157,7 @@ public class LoginController implements Initializable {
 
         System.out.println(resultat);
 
-        Utilisateur utilisateur = userService.login(name, prenom, email, password, roles);
+        Utilisateur utilisateur = userService.login(name, prenom, email, password);
 
         System.out.println(utilisateur);
 
