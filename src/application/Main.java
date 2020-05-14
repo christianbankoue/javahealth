@@ -18,7 +18,7 @@ public class Main extends Application {
         Util.closeConnection(db);
         */
         /* start AApplication */
-        Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("./../vue/login.fxml"));
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 

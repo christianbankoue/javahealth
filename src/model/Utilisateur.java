@@ -12,6 +12,7 @@ public class Utilisateur {
     protected String email;
     protected String password;
     protected String codeUnique;
+    protected String roles;
 
     private RoleEnum role;
     private FournisseurEnum fournisseur;
@@ -20,13 +21,14 @@ public class Utilisateur {
     public Utilisateur() {
     }
 
-    public Utilisateur(int id, String name, String prenom, String email, String password, String codeUnique) {
+    public Utilisateur(int id, String name, String prenom, String email, String password, String codeUnique, String roles) {
         this.id = id;
         this.name = name;
         this.prenom = prenom;
         this.email = email;
         this.password = password;
         this.codeUnique = codeUnique;
+        this.roles = roles;
     }
 
     public int getId() {
@@ -110,6 +112,7 @@ public class Utilisateur {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", codeUnique='" + codeUnique + '\'' +
+                ", roles=' " + roles + '\'' +
                 ", role=" + (role != null ? role.name() : "") +
                 ", fournisseur=" + (fournisseur != null ? fournisseur.name() : "")  +
                 ", personnelMedical=" + (personnelMedical != null ? personnelMedical.name() : "")  +

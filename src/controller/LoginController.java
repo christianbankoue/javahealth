@@ -2,13 +2,13 @@ package controller;
 
 import dao.service.UserServiceImp;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.UserCompte;
@@ -31,6 +31,34 @@ public class LoginController implements Initializable {
     private PasswordField passwordtxt;
     @FXML
     private TextField codeutxt;
+    @FXML
+    private TextField screen;
+    @FXML
+    private void medecin(ActionEvent event){
+        screen.setText("medecin");
+    }
+
+    @FXML
+    private void assistant(ActionEvent event){
+        screen.setText("Assistant");
+    }
+    @FXML
+    private void infirmier(ActionEvent event){
+        screen.setText("Infirmier");
+    }
+    @FXML
+    private void patient(ActionEvent event){
+        screen.setText("Patient");
+    }
+    @FXML
+    private void pharmacien(ActionEvent event){
+        screen.setText("Pharamcien");
+    }    @FXML
+    private void fournisseur(ActionEvent event){
+        screen.setText("Fournisseur");
+    }
+
+
 
     // @FXML
     // private TextField isUserConnected;
@@ -40,11 +68,15 @@ public class LoginController implements Initializable {
 
     }
 
+
+
     public void login(ActionEvent event){
         String name =  nametxt.getText();
         String prenom = prenomtxt.getText();
         String email = emailtxt.getText();
         String password = passwordtxt.getText();
+        String roles = screen.getText();
+
 
 //        String params = email+ "   " + password;
 //        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -56,7 +88,7 @@ public class LoginController implements Initializable {
 
         UserServiceImp userService = new UserServiceImp();
 
-        Utilisateur utilisateur = userService.login(name, prenom, email, password);
+        Utilisateur utilisateur = userService.login(name, prenom, email, password,roles);
 
         System.out.println(utilisateur);
 
@@ -91,10 +123,11 @@ public class LoginController implements Initializable {
         String email = emailtxt.getText();
         String password = passwordtxt.getText();
         String codeUnique = codeutxt.getText();
+        String roles = screen.getText();
 
-        String params = name+ "   " + prenom+ "   " + email+ "   " + password+ "  "+ codeUnique;
+        String params = name+ "   " + prenom+ "   " + email+ "   " + password+ "  "+ codeUnique+ "  "+roles;
 
-        UserCompte userCompte = new UserCompte(name, prenom, email, password, codeUnique);
+        UserCompte userCompte = new UserCompte(name, prenom, email, password, codeUnique,roles);
 
         UserServiceImp userService = new UserServiceImp();
 
@@ -102,7 +135,7 @@ public class LoginController implements Initializable {
 
         System.out.println(resultat);
 
-        Utilisateur utilisateur = userService.login(name, prenom, email, password);
+        Utilisateur utilisateur = userService.login(name, prenom, email, password, roles);
 
         System.out.println(utilisateur);
 
@@ -112,7 +145,7 @@ public class LoginController implements Initializable {
 
                 Stage gestionconsultaionStage = new Stage();
                 FXMLLoader loader = new FXMLLoader();
-                Pane root = loader.load(getClass().getResource("gestionconsultaion.fxml").openStream());
+                Pane root = loader.load(getClass().getResource("./../vue/gestionconsultaion.fxml").openStream());
 
                 GestionConsultaionController gcc =  (GestionConsultaionController)loader.getController();
                 gcc.injectUtilisateur(utilisateur);

@@ -8,6 +8,7 @@ public class UserCompte {
     private String email;
     private String password;
     private String codeUnique;
+    private String roles;
 
     private boolean admin;
     private boolean medecin;
@@ -17,12 +18,13 @@ public class UserCompte {
     private boolean pharmatien;
     private boolean patient;
 
-    public UserCompte(String name, String prenom, String email, String password, String codeUnique) {
+    public UserCompte(String name, String prenom, String email, String password, String codeUnique, String roles) {
         this.setName(name);
         this.setPrenom(prenom);
         this.setEmail(email);
         this.setPassword(password);
         this.setCodeUnique(codeUnique);
+        this.setRoles(roles);
     }
 
     public int getId() {
@@ -71,6 +73,14 @@ public class UserCompte {
 
     public void setCodeUnique(String codeUnique) {
         this.codeUnique = codeUnique;
+    }
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
     public boolean isAdmin() {

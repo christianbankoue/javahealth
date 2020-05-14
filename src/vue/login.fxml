@@ -41,7 +41,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button layoutX="305.0" layoutY="378.0" mnemonicParsing="false" onAction="#signUp" prefHeight="26.0" prefWidth="89.0" style="-fx-background-color: clqir;" text="SIGN UP" textFill="#a46a8c" />
+            <Button layoutX="305.0" layoutY="389.0" mnemonicParsing="false" onAction="#signUp" prefHeight="26.0" prefWidth="89.0" style="-fx-background-color: clqir;" text="SIGN UP" textFill="#a46a8c" />
 
 
             <Label layoutX="70.0" layoutY="133.0" prefHeight="30.0" prefWidth="90.0" text="Nom">
@@ -74,16 +74,17 @@
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <SplitMenuButton layoutX="436.0" layoutY="320.0" mnemonicParsing="false" text="Types d'utilisateurs">
+            <SplitMenuButton layoutX="414.0" layoutY="316.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="141.0" text="Types d'utilisateurs">
               <items>
-                <MenuItem mnemonicParsing="false" text="Medecin" />
-                <MenuItem mnemonicParsing="false" text="Assistant" />
-                  <MenuItem mnemonicParsing="false" text="Infirmier" />
-                  <MenuItem mnemonicParsing="false" text="Patient" />
-                  <MenuItem mnemonicParsing="false" text="Fournisseur" />
+                <MenuItem mnemonicParsing="false" onAction="#medecin" text="Medecin" />
+                <MenuItem mnemonicParsing="false" onAction="#assistant" text="Assistant" />
+                  <MenuItem mnemonicParsing="false" onAction="#infirmier" text="Infirmier" />
+                  <MenuItem mnemonicParsing="false" onAction="#patient" text="Patient" />
+                  <MenuItem mnemonicParsing="false" onAction="#fournisseur" text="Fournisseur" />
                   <MenuItem mnemonicParsing="false" text="Pharmacien" />
               </items>
             </SplitMenuButton>
+            <TextField fx:id="screen" disable="true" layoutX="413.0" layoutY="348.0" prefHeight="26.0" prefWidth="142.0" />
          </children>
       </AnchorPane>
    </children>

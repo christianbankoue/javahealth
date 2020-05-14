@@ -54,10 +54,11 @@ public class Util {
         String email = "merlin";
         String password = "merlin";
         String codeUnique = "merlin";
+        String roles ="Admin";
 
-        UserCompte userCompte = new UserCompte(name, prenom, email, password, codeUnique);
+        UserCompte userCompte = new UserCompte(name, prenom, email, password, codeUnique, roles);
 
-        String sql = "INSERT INTO USERCOMPTES (name, prenom, email, password, codeunique, role_id)  values(?,?,?,?,?,?);";
+        String sql = "INSERT INTO USERCOMPTES (name, prenom, email, password, codeunique, role_id, roles)  values(?,?,?,?,?,?,?);";
 
         try{
             db.initPrepar(sql);
@@ -68,6 +69,7 @@ public class Util {
             pstm.setString(4,userCompte.getPassword());
             pstm.setString(5,userCompte.getCodeUnique());
             pstm.setInt(6, RoleEnum.ADMIN.getIdentifiant());
+            pstm.setString(7,userCompte.getRoles());
 
             int rs = db.executeMaj();
             return rs;
