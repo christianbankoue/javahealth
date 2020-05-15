@@ -1,6 +1,5 @@
 package model;
 
-import model.enums.DomaineMedical;
 
 import java.util.Date;
 
@@ -8,7 +7,6 @@ import java.util.Date;
 public class Programmation {
 
     private int programmation_id;
-    private String code;
 
     //--patient info--//
     private String codePatient;
@@ -16,7 +14,7 @@ public class Programmation {
     private String prenomPatient;
 
     //--//
-    private DomaineMedical domaineMedical;
+    private String domaineMedical;
     private Date date;
 
     //affichage des 2 du bas a l action du select sur les 2 du haut
@@ -24,14 +22,8 @@ public class Programmation {
     private String hospital;
     private String medecinFullName;
 
+    private int consultation_id;
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public String getCodePatient() {
         return codePatient;
@@ -57,11 +49,11 @@ public class Programmation {
         this.prenomPatient = prenomPatient;
     }
 
-    public DomaineMedical getDomaineMedical() {
+    public String getDomaineMedical() {
         return domaineMedical;
     }
 
-    public void setDomaineMedical(DomaineMedical domaineMedical) {
+    public void setDomaineMedical(String domaineMedical) {
         this.domaineMedical = domaineMedical;
     }
 
@@ -95,5 +87,13 @@ public class Programmation {
 
     public void setProgrammation_id(int programmation_id) {
         this.programmation_id = programmation_id;
+    }
+
+    public int getConsultation_id() {
+        return consultation_id;
+    }
+
+    public void setConsultation_id(int consultation_id) {
+        this.consultation_id = consultation_id;
     }
 }

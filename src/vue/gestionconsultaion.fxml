@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="761.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GestionConsultaionController" >
    <top>
       <MenuBar prefWidth="716.0" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="Acceuil" />
-          <Menu mnemonicParsing="false" text="Programmer une consulation " />
+          <Menu mnemonicParsing="false" text="Programmer une consulation " >
+              <items>
+                  <MenuItem mnemonicParsing="false" onAction="#programmation" text="Add" />
+              </items>
+          </Menu>
           <Menu mnemonicParsing="false" text="Ajouter une consultation" />
             <Menu mnemonicParsing="false" text="Liberer une recette" />
             <Menu mnemonicParsing="false" text="Log out">

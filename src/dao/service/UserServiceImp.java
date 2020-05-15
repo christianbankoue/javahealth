@@ -2,6 +2,7 @@ package dao.service;
 
 import dao.basededonne.DB;
 import dao.service.serviceI.IUserService;
+import model.Programmation;
 import model.UserCompte;
 import model.Utilisateur;
 import model.enums.RoleEnum;
@@ -87,4 +88,35 @@ public class UserServiceImp implements IUserService {
         }
         return new Utilisateur();
     }
+
+    public int addProgrammation(Programmation pg) {
+        String sql = "INSERT INTO PROGRAMMATIONS (codePatient, namePatient, prenomPatient, " +
+                "domaineMedical, date, hospital, medecinFullName) values (?,?,?,?,?,?,?) ";
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+
+            pstm.setString(1,pg.getCodePatient());
+            pstm.setString(2,pg.getNamePatient());
+            pstm.setString(3,pg.getPrenomPatient());
+            pstm.setString(4,pg.getDomaineMedical());
+            // pstm.setDate(5, pg.getDate());
+            pstm.setString(6, pg.getHospital());
+            pstm.setString(7, pg.getMedecinFullName());
+
+            int rs = db.executeMaj();
+            return rs;
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int delProgrammation(Programmation pg) {
+        return 0;
+    }
+
+
 }
