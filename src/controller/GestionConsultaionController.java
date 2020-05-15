@@ -33,7 +33,7 @@ public class GestionConsultaionController implements Initializable {
 
             Stage popupwindow = new Stage();
             popupwindow.initModality(Modality.APPLICATION_MODAL);
-            popupwindow.setTitle("This is a pop up window");
+            popupwindow.setTitle("Nouvelle programmation");
 
             FXMLLoader loader = new FXMLLoader();
             Pane root = loader.load(getClass().getResource("./../vue/programmation.fxml").openStream());

@@ -10,7 +10,7 @@ import java.util.List;
 public class Consultation {
 
     private int consultation_id;
-    private String code;
+
 
     //--patient info--//
     // il regarde sur la programmation et reporte les info ici
@@ -30,14 +30,6 @@ public class Consultation {
     //on valide la consultation puis on ajouter maladie ou ne rien faire
     private List<Maladie> maladies = new ArrayList<>();
 
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public String getCodeUniquePatient() {
         return codeUniquePatient;

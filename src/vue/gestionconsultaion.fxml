@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="761.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GestionConsultaionController" >
-   <top>
-      <MenuBar prefWidth="716.0" BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="Acceuil" />
-          <Menu mnemonicParsing="false" text="Programmer une consulation " >
-              <items>
-                  <MenuItem mnemonicParsing="false" onAction="#programmation" text="Add" />
-              </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Ajouter une consultation" />
-            <Menu mnemonicParsing="false" text="Liberer une recette" />
-            <Menu mnemonicParsing="false" text="Log out">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-              </items>
-            </Menu>
-        </menus>
-      </MenuBar>
-   </top>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="761.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GestionConsultaionController">
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: skyblue;" BorderPane.alignment="CENTER" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: skyblue;" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="478.0" layoutY="1.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="86.0" style="-fx-background-color: lear;" text="Log out" />
+         </children></AnchorPane>
    </center>
+   <left>
+      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="-3.0" layoutY="15.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="198.0" style="-fx-background-color: clair;" text="Accuiel" />
+            <Button layoutY="54.0" mnemonicParsing="false" onAction="#programmation" prefHeight="25.0" prefWidth="194.0" style="-fx-background-color: clair;" text="Faire une programmation" />
+            <Button layoutX="-1.0" layoutY="92.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="194.0" style="-fx-background-color: clair;" text="Ajouter une consultation" />
+         </children>
+      </Pane>
+   </left>
 </BorderPane>
