@@ -11,7 +11,6 @@ public class Consultation {
 
     private int consultation_id;
 
-
     //--patient info--//
     // il regarde sur la programmation et reporte les info ici
     private String codeUniquePatient;

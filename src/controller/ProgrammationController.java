@@ -1,5 +1,6 @@
 package controller;
 
+import dao.service.UserServiceImp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,7 +12,7 @@ import model.Utilisateur;
 import model.enums.DomaineMedical;
 
 import java.net.URL;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class ProgrammationController  implements Initializable {
@@ -45,13 +46,16 @@ public class ProgrammationController  implements Initializable {
 
         //--//
         programmation.setDomaineMedical(DomaineMedical.CONTROLE_DE_ROUTINE.name());
-        programmation.setDate(new Date());
+        programmation.setDate( LocalDate.now());
 
         //affichage des 2 du bas a l action du select sur les 2 du haut
         //on va simuller une recherche des hospitaux et medecin
         programmation.setHospital("Hospital 1");
         programmation.setMedecinFullName("Jacques eric");
 
+
+        UserServiceImp serviceImp = new UserServiceImp();
+        serviceImp.addProgrammation(programmation);
 
         ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
 
