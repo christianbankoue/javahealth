@@ -28,7 +28,7 @@
             </FlowPane>
 
 
-                <Button layoutX="305.0" layoutY="389.0" mnemonicParsing="false" onAction="#valider" prefHeight="26.0" prefWidth="89.0" style="-fx-background-color: clqir;" text="VALIDER" textFill="#a46a8c" />
+                <Button layoutX="305.0" layoutY="406.0" mnemonicParsing="false" onAction="#valider" prefHeight="26.0" prefWidth="89.0" style="-fx-background-color: clqir;" text="VALIDER" textFill="#a46a8c" />
 
 
                 <Label layoutX="73.0" layoutY="133.0" prefHeight="30.0" prefWidth="90.0" text="Nom">
