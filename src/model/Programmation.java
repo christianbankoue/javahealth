@@ -1,7 +1,7 @@
 package model;
 
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /* un patient peut faire une programmation*/
 public class Programmation {
@@ -15,7 +15,7 @@ public class Programmation {
 
     //--//
     private String domaineMedical;
-    private Date date;
+    private LocalDate date;
 
     //affichage des 2 du bas a l action du select sur les 2 du haut
     //on va simuller une recherche des hospitaux et medecin
@@ -57,11 +57,11 @@ public class Programmation {
         this.domaineMedical = domaineMedical;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

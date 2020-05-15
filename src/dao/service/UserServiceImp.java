@@ -101,7 +101,16 @@ public class UserServiceImp implements IUserService {
             pstm.setString(2,pg.getNamePatient());
             pstm.setString(3,pg.getPrenomPatient());
             pstm.setString(4,pg.getDomaineMedical());
-            // pstm.setDate(5, pg.getDate());
+
+            // pstm.setObject(5, pg.getDate());
+            // On va le recuperer ainsi:
+            // LocalDate localDate = ResultSet.getObject( 1 , LocalDate.class );
+
+            java.sql.Date sqlDate = java.sql.Date.valueOf( pg.getDate() );
+            pstm.setDate(5, sqlDate);
+            // On va le recuperer ainsi:
+            // LocalDate localDate = sqlDate.toLocalDate();
+
             pstm.setString(6, pg.getHospital());
             pstm.setString(7, pg.getMedecinFullName());
 
