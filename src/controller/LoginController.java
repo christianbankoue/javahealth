@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -19,6 +20,8 @@ import model.enums.RoleEnum;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static javafx.fxml.FXMLLoader.*;
 
 public class LoginController implements Initializable {
 
@@ -183,6 +186,58 @@ public class LoginController implements Initializable {
             // label erreur signUp
             // isUserConnected.setText("Erreur signUp verifier vos informations");
         }
+    }
+
+    public void signIn(ActionEvent event){
+        String name =  nametxt.getText();
+        String prenom = prenomtxt.getText();
+        String email = emailtxt.getText();
+        String password = passwordtxt.getText();
+
+        UserServiceImp userService = new UserServiceImp();
+
+        Utilisateur utilisateur = userService.login(name, prenom, email, password);
+
+        System.out.println(utilisateur);
+
+        if(utilisateur.getCodeUnique() != null){
+            try {
+                ((Node)event.getSource()).getScene().getWindow().hide();
+
+                Stage gestionconsultaionStage = new Stage();
+                FXMLLoader loader = new FXMLLoader();
+                Pane root = loader.load(getClass().getResource("./../vue/gestionconsultaion.fxml").openStream());
+
+                GestionConsultaionController gcc =  (GestionConsultaionController)loader.getController();
+                gcc.injectUtilisateur(utilisateur);
+
+                Scene scene = new Scene(root);
+                gestionconsultaionStage.setScene(scene);
+                gestionconsultaionStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            // label erreur login
+            // isUserConnected.setText("Erreur login verifier vos informations");
+        }
+
+    }
+
+    public void sign(ActionEvent event) throws IOException {
+        ((Node) event.getSource()).getScene().getWindow().hide();
+        Parent root = FXMLLoader.load(getClass().getResource("./../vue/login.fxml"));
+        Stage primaryStage = new Stage();
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+    }
+
+    public void connect(ActionEvent event) throws IOException {
+        ((Node) event.getSource()).getScene().getWindow().hide();
+        Parent root = FXMLLoader.load(getClass().getResource("./../vue/signIn.fxml"));
+        Stage primaryStage = new Stage();
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
     }
 
 }

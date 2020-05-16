@@ -69,7 +69,7 @@
                <font>
                   <Font size="14.0" />
                </font></Label>
-            <Button layoutX="214.0" layoutY="439.0" mnemonicParsing="false" onAction="#login" prefHeight="18.0" prefWidth="66.0" style="-fx-background-color: sky;" text="Log in" textFill="#8f7373" />
+            <Button layoutX="214.0" layoutY="439.0" mnemonicParsing="false" onAction="#connect" prefHeight="18.0" prefWidth="66.0" style="-fx-background-color: sky;" text="Log in" textFill="#8f7373" />
             <Label layoutX="199.0" layoutY="102.0" text="Les identifiants entrés sont incorrets!!!!" textFill="#f50b0b">
                <font>
                   <Font size="18.0" />
