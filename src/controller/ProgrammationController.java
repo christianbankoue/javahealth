@@ -12,6 +12,7 @@ import model.Utilisateur;
 import model.enums.DomaineMedical;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -107,7 +108,9 @@ public class ProgrammationController implements Initializable {
 
             //--//
             programmation.setDomaineMedical(DomaineMedical.valueOf(domaineMedicalselected.getText()).name());
-            //programmation.setDate(datePickerS.getValue());  TODO
+
+            LocalDate value = datePickerS.getValue();
+            programmation.setDate(value.atStartOfDay());
 
             //affichage des 2 du bas a l action du select sur les 2 du haut
             //on va simuller une recherche des hospitaux et medecin

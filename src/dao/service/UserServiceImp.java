@@ -348,7 +348,7 @@ public class UserServiceImp implements IUserService {
         catch (Exception ex){
             ex.printStackTrace();
         }
-//TODO retourne une liste car le localdate n est pas precis donc il faut le LocalDateTime
+
         return consultation;
     }
 
