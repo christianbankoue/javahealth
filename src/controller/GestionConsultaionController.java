@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.Consultation;
 import model.Programmation;
 import model.Utilisateur;
 
@@ -25,6 +26,7 @@ import java.util.ResourceBundle;
 
 public class GestionConsultaionController implements Initializable {
 
+
     Utilisateur utilisateur;
 
     @FXML
@@ -33,6 +35,12 @@ public class GestionConsultaionController implements Initializable {
     @FXML
     private ListView<String> listViewPg;
 
+    @FXML
+    public ListView<String> listViewCs;
+
+    @FXML
+    public Button consultationKey;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -40,7 +48,15 @@ public class GestionConsultaionController implements Initializable {
 
     public void injectUtilisateur(Utilisateur utilisateur){
         this.utilisateur = utilisateur;
-        getAllProgrammations();
+
+        if(utilisateur.getRole().getIdentifiant() == 2 && "MEDECIN".equals(utilisateur.getPersonnelMedical().name())){
+            consultationKey.setDisable(false);
+            getAllProgrammations();
+            getAllConsultations();
+        }else{
+            consultationKey.setDisable(true);
+            getAllProgrammations();
+        }
     }
 
     public void programmation(ActionEvent event){
@@ -75,7 +91,7 @@ public class GestionConsultaionController implements Initializable {
         try {
             Stage popupwindow = new Stage();
             popupwindow.initModality(Modality.APPLICATION_MODAL);
-            popupwindow.setTitle("Nouvelle programmation");
+            popupwindow.setTitle("Detail de votre programmation "+key);
 
             FXMLLoader loader = new FXMLLoader();
             Pane root = loader.load(getClass().getResource("./../vue/programmation.fxml").openStream());
@@ -84,6 +100,51 @@ public class GestionConsultaionController implements Initializable {
 
              pc.injectProgrammation( utilisateur.getName(),  utilisateur.getPrenom(),
                      programmation.getDomaineMedical(), programmation.getMedecinFullName(), programmation.getHospital(), programmation.getDate());
+
+            Scene scene = new Scene(root);
+            popupwindow.setScene(scene);
+            popupwindow.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handleMouseClickCs(MouseEvent mouseEvent) {
+        System.out.println("clicked on " + listViewPg.getSelectionModel().getSelectedItem());
+        //158950080011374326664 - Merlin - 15/MAY/2020
+
+        String[] donnees = listViewPg.getSelectionModel().getSelectedItem().split("#");
+
+        String key = donnees[0].trim();
+        String namePatient = donnees[1].trim();
+        String date = donnees[2].trim();
+
+        String[] dateSplited = date.split("/");
+        String day = dateSplited[0];
+        String month = dateSplited[1];
+        String year = dateSplited[2];
+        LocalDate l = LocalDate.of(Integer.parseInt(year), Month.valueOf(month), Integer.parseInt(day));
+
+        Long epoque = (l.atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
+
+        String[] keySplited = key.split(String.valueOf(epoque));
+        int consultation_id = Integer.parseInt(keySplited[1].substring(0,1));
+
+        UserServiceImp serviceImp = new UserServiceImp();
+        Consultation consultation = serviceImp.getConsultationById(consultation_id);
+
+        try {
+            Stage popupwindow = new Stage();
+            popupwindow.initModality(Modality.APPLICATION_MODAL);
+            popupwindow.setTitle("Detail de votre consultation "+key);
+
+            FXMLLoader loader = new FXMLLoader();
+            Pane root = loader.load(getClass().getResource("./../vue/consultation.fxml").openStream());
+
+            ConsultationController pc = loader.getController();
+
+            pc.injectUtilisateur(utilisateur, consultation);
 
             Scene scene = new Scene(root);
             popupwindow.setScene(scene);
@@ -119,7 +180,7 @@ public class GestionConsultaionController implements Initializable {
 
     private void getAllProgrammations() {
         UserServiceImp serviceImp = new UserServiceImp();
-        if(this.utilisateur != null /*&& utilisateur.getRole().getIdentifiant() == 5*/){
+        if(this.utilisateur != null){
 
             List<Programmation> pgs = serviceImp.
                     getAllProgrammation(this.utilisateur.getCodeUnique(), this.utilisateur.getName(), this.utilisateur.getPrenom());
@@ -142,31 +203,56 @@ public class GestionConsultaionController implements Initializable {
 
     public void consultation(ActionEvent actionEvent) {
         try {
+            //Si on a des programmations liees a ce medecin alors il peut faire des consultations
 
-            Stage popupwindow = new Stage();
-            popupwindow.initModality(Modality.APPLICATION_MODAL);
-            popupwindow.setTitle("Nouvelle Consultation");
-
-            FXMLLoader loader = new FXMLLoader();
-            Pane root = loader.load(getClass().getResource("./../vue/consultation.fxml").openStream());
-
-            ConsultationController pc = loader.getController();
-
-
-            //il faut afficher cette liste et selectionner un item a fin de faire la consultation
             String medecinFullName = utilisateur.getName()+ " - " +utilisateur.getPrenom();
             UserServiceImp serviceImp = new UserServiceImp();
             List<Programmation> programmations = serviceImp.getAllProgrammationByMedecin(medecinFullName);
 
-            // pour chaque programmation on a un nom et le prenom du patient.
-            pc.injectUtilisateur(utilisateur, programmations);
+            if(programmations.size() > 0 ){
 
-            Scene scene = new Scene(root);
-            popupwindow.setScene(scene);
-            popupwindow.showAndWait();
+                Stage popupwindow = new Stage();
+                popupwindow.initModality(Modality.APPLICATION_MODAL);
+                popupwindow.setTitle("Nouvelle Consultation");
+
+                FXMLLoader loader = new FXMLLoader();
+                Pane root = loader.load(getClass().getResource("./../vue/consultation.fxml").openStream());
+
+                ConsultationController pc = loader.getController();
+
+                pc.injectUtilisateur(utilisateur, programmations);
+
+                Scene scene = new Scene(root);
+                popupwindow.setScene(scene);
+                popupwindow.showAndWait();
+
+            }else{
+                // TODO Ajouter un pop up(Alert)
+                System.out.println("Vous n avez pas de consultation en cours...");
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void getAllConsultations() {
+        UserServiceImp serviceImp = new UserServiceImp();
+        List<Consultation> consultations = serviceImp.getConsultationByCodeUnique(this.utilisateur.getCodeUnique());
+
+        listViewCs.getItems().remove(0, listViewCs.getItems().size());
+
+        consultations.forEach(consultation -> {
+            String date = consultation.getDateVisite().getDayOfMonth() + "/"+
+                    consultation.getDateVisite().getMonth().toString() +"/"+
+                    consultation.getDateVisite().getYear();
+
+            Long epoque = (consultation.getDateVisite().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
+            String key = String.valueOf(epoque +""+ consultation.getConsultation_id() +""+ String.valueOf(epoque).hashCode());
+
+            listViewCs.getItems().add(
+                    key +" # "+ consultation.getNamePatient() +" # "+ consultation.getNameMedecin() + " # " +date);
+        });
+
     }
 }

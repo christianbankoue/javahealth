@@ -2,10 +2,7 @@ package dao.service;
 
 import dao.basededonne.DB;
 import dao.service.serviceI.IUserService;
-import model.Consultation;
-import model.Programmation;
-import model.UserCompte;
-import model.Utilisateur;
+import model.*;
 import model.enums.PersonnelMedicalEnum;
 import model.enums.RoleEnum;
 
@@ -321,7 +318,7 @@ public class UserServiceImp implements IUserService {
         return 0;
     }
 
-    public Consultation getConsultationByCodeUniqueAndDate(String codeUniquePatient, String codeUniqueMedecin, java.sql.Date sqlDate){
+    public Consultation getCstByCodeUAndDate(String codeUniquePatient, String codeUniqueMedecin, java.sql.Date sqlDate){
         String sql = "SELECT * FROM CONSULTATIONS WHERE " +
                 "codeUniquePatient = ? and codeUniqueMedecin = ? and date = ? ";
 
@@ -396,5 +393,125 @@ public class UserServiceImp implements IUserService {
         }
 
         return consultations;
+    }
+
+    public Consultation getConsultationById(int consultation_id) {
+
+        String sql = "SELECT * FROM CONSULTATIONS WHERE consultation_id = ? ";
+
+        Consultation consultation = new Consultation();
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setInt(1, consultation_id);
+
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+                String codeUniquePatient = rs.getString("codeUniquePatient");
+                String namePatient = rs.getString("namePatient");
+                String prenomPatient = rs.getString("prenomPatient");
+                String nameMedecin = rs.getString("nameMedecin");
+                String prenomMedecin = rs.getString("prenomMedecin");
+                String codeUniqueMedecin = rs.getString("codeUniqueMedecin");
+
+                LocalDate dateVisite = (rs.getDate("dateVisite")).toLocalDate();
+
+                consultation = new Consultation(codeUniquePatient, namePatient, prenomPatient,
+                        codeUniqueMedecin, nameMedecin, prenomMedecin);
+                consultation.setConsultation_id(consultation_id);
+                consultation.setDateVisite(dateVisite);
+
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return consultation;
+    }
+
+    public int addRecette(Recette recette){
+        String sql = "INSERT INTO RECETTES " +
+                "(label, detail, medecin_id, pharmacien_id, date)" +
+                " values (?,?,?,?,?) ";
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setString(1,recette.getLabel());
+            pstm.setString(2,recette.getDetail());
+            pstm.setInt(3,recette.getMedecin_id());
+            pstm.setInt(4,recette.getPharmacien_id());
+            java.sql.Date sqlDate = java.sql.Date.valueOf(recette.getDate());
+            pstm.setDate(5,sqlDate);
+
+            int rs = db.executeMaj();
+            return rs;
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return 0;
+
+    }
+
+    public Recette getRecetteByMedecinAndDateAndPharnacien(int medecinId, int pharmacienId, java.sql.Date sqlDate){
+
+        String sql = "SELECT * FROM RECETTES WHERE " +
+                "medecin_id = ? and pharmacien_id = ? and date = ? ";
+
+        Recette recette = new Recette();
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setInt(1,medecinId);
+            pstm.setInt(1,pharmacienId);
+            pstm.setDate(1, sqlDate);
+
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+
+                int recette_id = rs.getInt("recette_id");
+                String label = rs.getString("label");
+                String detail = rs.getString("detail");
+
+                recette = new Recette(label, detail, medecinId, pharmacienId, sqlDate.toLocalDate());
+                recette.setRecette_id(recette_id);
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return recette;
+    }
+
+    public int addMaladie(Maladie maladie){
+        String sql = "INSERT INTO MALADIES " +
+                "(nom, description, consultation_id, recette_id)" +
+                " values (?,?,?,?) ";
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setString(1,maladie.getNom());
+            pstm.setString(2,maladie.getDescription());
+            pstm.setInt(3,maladie.getConsultation_id());
+            pstm.setInt(4,maladie.getRecette_id());
+
+            int rs = db.executeMaj();
+            return rs;
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return 0;
+
     }
 }

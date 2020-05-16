@@ -11,9 +11,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import model.Consultation;
-import model.Programmation;
-import model.Utilisateur;
+import model.*;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -33,7 +31,7 @@ public class ConsultationController implements Initializable {
     public TextField nomPatient;
     public TextField prenomPatient;
 
-    public TextField maladie;
+    public TextField maladieLabel;
     public TextArea description;
 
     @FXML
@@ -45,8 +43,27 @@ public class ConsultationController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        nomMedecin.setDisable(true);
+        prenomMedecin.setDisable(true);
+        nomPatient.setDisable(true);
+        prenomPatient.setDisable(true);
+        valider.setDisable(true);
+    }
 
+    public void injectUtilisateur(Utilisateur medecinUser, Consultation consultation ) {
+        this.medecinUser = medecinUser;
 
+        listViewPg.getItems().remove(0, listViewPg.getItems().size());
+        listViewPg.setDisable(true);
+
+        nomMedecin.setText(this.medecinUser.getName());
+        prenomMedecin.setText(this.medecinUser.getPrenom());
+
+        nomPatient.setText(consultation.getNamePatient());
+        prenomPatient.setText(consultation.getPrenomPatient());
+        codePatient = consultation.getCodeUniquePatient();
+        valider.setDisable(false);
+        valider.setText("OK");
     }
 
     public void injectUtilisateur(Utilisateur medecinUser, List<Programmation> pgs) {
@@ -71,6 +88,7 @@ public class ConsultationController implements Initializable {
     }
 
     public void handleMouseClick(MouseEvent mouseEvent) {
+        valider.setDisable(false);
         System.out.println("clicked on " + listViewPg.getSelectionModel().getSelectedItem());
         //158950080011374326664 - Merlin - 15/MAY/2020
 
@@ -102,17 +120,32 @@ public class ConsultationController implements Initializable {
 
     public void valider(ActionEvent actionEvent) {
 
-        if(valider.getText().equals("VALIDERkkkk")){
-            Consultation consultation = new Consultation(codePatient, nomPatient.getText(), prenomPatient.getText(),
+        if(valider.getText().equals("VALIDER")){
+            Consultation cst = new Consultation(codePatient, nomPatient.getText(), prenomPatient.getText(),
                     medecinUser.getCodeUnique(), prenomMedecin.getText(), prenomMedecin.getText());
-            consultation.setDateVisite(LocalDate.now());
+            cst.setDateVisite(LocalDate.now());
 
+            //ajout de la consultation
             UserServiceImp serviceImp = new UserServiceImp();
-            int result = serviceImp.addConsultation(consultation);
+            int result = serviceImp.addConsultation(cst);
 
-            java.sql.Date sqlDate = java.sql.Date.valueOf(consultation.getDateVisite());
-            Consultation consultationByCodeUniqueAndDate = serviceImp.getConsultationByCodeUniqueAndDate(consultation.getCodeUniquePatient(), consultation.getCodeUniqueMedecin(), sqlDate);
-            System.out.println(result);
+            //on recupere la dite consultation de la base de donnees
+            java.sql.Date sqlDate = java.sql.Date.valueOf(cst.getDateVisite());
+            Consultation cstResult = serviceImp.getCstByCodeUAndDate(cst.getCodeUniquePatient(),
+                    cst.getCodeUniqueMedecin(), sqlDate);
+
+            System.out.println(cstResult);
+
+            //On sauvegarde la recette
+            Recette recette = new Recette("label1", "detail1", medecinUser.getId(), 1, LocalDate.now());
+            serviceImp.addRecette(recette);
+
+            Recette recetteSaved = serviceImp.getRecetteByMedecinAndDateAndPharnacien(medecinUser.getId(),  1, java.sql.Date.valueOf(recette.getDate()));
+
+            //On sauvegarde la maladie detectee lors de la consultation
+            Maladie maladie = new Maladie(maladieLabel.getText(), description.getText(),
+                    cstResult.getConsultation_id(), recetteSaved.getRecette_id());
+            serviceImp.addMaladie(maladie);
 
         }
 

@@ -36,7 +36,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="maladie" layoutX="186.0" layoutY="287.0" prefHeight="32.0" prefWidth="338.0" promptText="maladie..." />
+            <TextField fx:id="maladieLabel" layoutX="186.0" layoutY="287.0" prefHeight="32.0" prefWidth="338.0" promptText="maladie..." />
             <ListView fx:id="listViewPg" onMouseClicked="#handleMouseClick" layoutX="117.0" layoutY="6.0" prefHeight="113.0" prefWidth="495.0" >
                 <items>
                     <FXCollections fx:factory="observableArrayList">

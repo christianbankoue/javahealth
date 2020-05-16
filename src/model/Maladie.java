@@ -12,6 +12,16 @@ public class Maladie {
     //on attache une recette que l on sauvegarde
     private int recette_id;
 
+    public Maladie() {
+    }
+
+    public Maladie(String nom, String description, int consultation_id, int recette_id) {
+        this.nom = nom;
+        this.description = description;
+        this.consultation_id = consultation_id;
+        this.recette_id = recette_id;
+    }
+
     public String getNom() {
         return nom;
     }

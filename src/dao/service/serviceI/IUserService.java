@@ -1,9 +1,6 @@
 package dao.service.serviceI;
 
-import model.Consultation;
-import model.Programmation;
-import model.UserCompte;
-import model.Utilisateur;
+import model.*;
 
 import java.util.List;
 
@@ -20,6 +17,11 @@ public interface IUserService {
 
     int addConsultation(Consultation cs);
     List<Consultation> getConsultationByCodeUnique( String codeUniqueMedecin);
-    Consultation getConsultationByCodeUniqueAndDate(String codeUniquePatient, String codeUniqueMedecin, java.sql.Date sqlDate);
+    Consultation getCstByCodeUAndDate(String codeUniquePatient, String codeUniqueMedecin, java.sql.Date sqlDate);
+    Consultation getConsultationById(int consultation_id);
+
+    int addRecette(Recette recette);
+    Recette getRecetteByMedecinAndDateAndPharnacien(int medecinId, int pharmacienId, java.sql.Date sqlDate);
+    int addMaladie(Maladie maladie);
 
 }

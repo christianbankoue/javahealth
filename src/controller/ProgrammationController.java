@@ -93,7 +93,7 @@ public class ProgrammationController implements Initializable {
         hopitalList.setDisable(true);
         datePickerS.setValue(date);
         datePickerS.setDisable(true);
-        valideB.setText("Fermer");
+        valideB.setText("OK");
     }
 
     public void valider(ActionEvent event) {
