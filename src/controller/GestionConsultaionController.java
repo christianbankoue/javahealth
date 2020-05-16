@@ -43,7 +43,7 @@ public class GestionConsultaionController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        System.out.println("lll");
     }
 
     public void injectUtilisateur(Utilisateur utilisateur){
@@ -60,8 +60,60 @@ public class GestionConsultaionController implements Initializable {
     }
 
     public void programmation(ActionEvent event){
-        detailProgrammation(true);
+        detailProgrammation();
         getAllProgrammations();
+    }
+
+    private void getAllProgrammations() {
+        UserServiceImp serviceImp = new UserServiceImp();
+        if(this.utilisateur != null){
+
+            List<Programmation> pgs = serviceImp.
+                    getAllProgrammation(this.utilisateur.getCodeUnique(), this.utilisateur.getName(), this.utilisateur.getPrenom());
+
+            listViewPg.getItems().remove(0, listViewPg.getItems().size());
+
+            pgs.forEach(programmation -> {
+                String date = programmation.getDate().getDayOfMonth() + "/"+
+                        programmation.getDate().getMonth().toString() +"/"+
+                        programmation.getDate().getYear();
+
+                Long epoque = (programmation.getDate().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
+                String key = String.valueOf(epoque +""+ programmation.getProgrammation_id() +""+ String.valueOf(epoque).hashCode());
+                listViewPg.getItems().add(
+                        key +" # "+ programmation.getNamePatient() + " # " +date);
+            });
+
+        }
+    }
+
+    public void consultation(ActionEvent actionEvent) {
+
+        boolean success = detailConsultatation();
+        if(success){
+            getAllConsultations();
+        }
+
+    }
+
+    private void getAllConsultations() {
+        UserServiceImp serviceImp = new UserServiceImp();
+        List<Consultation> consultations = serviceImp.getConsultationByCodeUnique(this.utilisateur.getCodeUnique());
+
+        listViewCs.getItems().remove(0, listViewCs.getItems().size());
+
+        consultations.forEach(consultation -> {
+            String date = consultation.getDateVisite().getDayOfMonth() + "/"+
+                    consultation.getDateVisite().getMonth().toString() +"/"+
+                    consultation.getDateVisite().getYear();
+
+            Long epoque = (consultation.getDateVisite().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
+            String key = String.valueOf(epoque +""+ consultation.getConsultation_id() +""+ String.valueOf(epoque).hashCode());
+
+            listViewCs.getItems().add(
+                    key +" # "+ consultation.getNamePatient() +" # "+ consultation.getNameMedecin() + " # " +date);
+        });
+
     }
 
     public void handleMouseClick(MouseEvent mouseEvent) {
@@ -126,7 +178,8 @@ public class GestionConsultaionController implements Initializable {
 
             String key = donnees[0].trim();
             String namePatient = donnees[1].trim();
-            String date = donnees[2].trim();
+            String nameMedecin = donnees[2].trim();
+            String date = donnees[3].trim();
 
             String[] dateSplited = date.split("/");
             String day = dateSplited[0];
@@ -165,7 +218,7 @@ public class GestionConsultaionController implements Initializable {
 
     }
 
-    public void detailProgrammation(Boolean edit){
+    public void detailProgrammation(){
 
         try {
             Stage popupwindow = new Stage();
@@ -188,30 +241,8 @@ public class GestionConsultaionController implements Initializable {
 
     }
 
-    private void getAllProgrammations() {
-        UserServiceImp serviceImp = new UserServiceImp();
-        if(this.utilisateur != null){
+    public boolean detailConsultatation(){
 
-            List<Programmation> pgs = serviceImp.
-                    getAllProgrammation(this.utilisateur.getCodeUnique(), this.utilisateur.getName(), this.utilisateur.getPrenom());
-
-            listViewPg.getItems().remove(0, listViewPg.getItems().size());
-
-            pgs.forEach(programmation -> {
-                String date = programmation.getDate().getDayOfMonth() + "/"+
-                        programmation.getDate().getMonth().toString() +"/"+
-                        programmation.getDate().getYear();
-
-                Long epoque = (programmation.getDate().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
-                String key = String.valueOf(epoque +""+ programmation.getProgrammation_id() +""+ String.valueOf(epoque).hashCode());
-                listViewPg.getItems().add(
-                         key +" # "+ programmation.getNamePatient() + " # " +date);
-            });
-
-        }
-    }
-
-    public void consultation(ActionEvent actionEvent) {
         try {
             //Si on a des programmations liees a ce medecin alors il peut faire des consultations
 
@@ -236,33 +267,18 @@ public class GestionConsultaionController implements Initializable {
                 popupwindow.setScene(scene);
                 popupwindow.showAndWait();
 
+                return true;
             }else{
                 // TODO Ajouter un pop up(Alert)
                 System.out.println("Vous n avez pas de consultation en cours...");
+                return false;
             }
 
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
-    }
-
-    private void getAllConsultations() {
-        UserServiceImp serviceImp = new UserServiceImp();
-        List<Consultation> consultations = serviceImp.getConsultationByCodeUnique(this.utilisateur.getCodeUnique());
-
-        listViewCs.getItems().remove(0, listViewCs.getItems().size());
-
-        consultations.forEach(consultation -> {
-            String date = consultation.getDateVisite().getDayOfMonth() + "/"+
-                    consultation.getDateVisite().getMonth().toString() +"/"+
-                    consultation.getDateVisite().getYear();
-
-            Long epoque = (consultation.getDateVisite().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
-            String key = String.valueOf(epoque +""+ consultation.getConsultation_id() +""+ String.valueOf(epoque).hashCode());
-
-            listViewCs.getItems().add(
-                    key +" # "+ consultation.getNamePatient() +" # "+ consultation.getNameMedecin() + " # " +date);
-        });
 
     }
+
 }

@@ -23,5 +23,6 @@ public interface IUserService {
     int addRecette(Recette recette);
     Recette getRecetteByMedecinAndDateAndPharnacien(int medecinId, int pharmacienId, java.sql.Date sqlDate);
     int addMaladie(Maladie maladie);
+    Maladie getMaladieByConsultationId(int consultation_id);
 
 }

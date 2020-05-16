@@ -49,7 +49,7 @@ public class ConsultationController implements Initializable {
         validerButton.setDisable(true);
     }
 
-    public void injectUtilisateur(Utilisateur medecinUser, Consultation consultation ) {
+    public void injectUtilisateur(Utilisateur medecinUser, Consultation consultation) {
         this.medecinUser = medecinUser;
 
         listViewPg.getItems().remove(0, listViewPg.getItems().size());
@@ -60,6 +60,13 @@ public class ConsultationController implements Initializable {
 
         nomPatient.setText(consultation.getNamePatient());
         prenomPatient.setText(consultation.getPrenomPatient());
+
+
+        UserServiceImp serviceImp = new UserServiceImp();
+        Maladie maladie = serviceImp.getMaladieByConsultationId(consultation.getConsultation_id());
+        description.setText(maladie.getDescription());
+        maladieLabel.setText(maladie.getNom());
+
         codePatient = consultation.getCodeUniquePatient();
         validerButton.setDisable(false);
         validerButton.setText("OK");
@@ -72,14 +79,14 @@ public class ConsultationController implements Initializable {
         listViewPg.getItems().remove(0, listViewPg.getItems().size());
 
         pgs.forEach(programmation -> {
-            String date = programmation.getDate().getDayOfMonth() + "/"+
-                    programmation.getDate().getMonth().toString() +"/"+
+            String date = programmation.getDate().getDayOfMonth() + "/" +
+                    programmation.getDate().getMonth().toString() + "/" +
                     programmation.getDate().getYear();
 
             Long epoque = (programmation.getDate().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
-            String key = String.valueOf(epoque +""+ programmation.getProgrammation_id() +""+ String.valueOf(epoque).hashCode());
+            String key = String.valueOf(epoque + "" + programmation.getProgrammation_id() + "" + String.valueOf(epoque).hashCode());
             listViewPg.getItems().add(
-                    key +" # "+ programmation.getNamePatient() + " # " +date);
+                    key + " # " + programmation.getNamePatient() + " # " + date);
         });
 
         nomMedecin.setText(this.medecinUser.getName());
@@ -108,7 +115,7 @@ public class ConsultationController implements Initializable {
         Long epoque = (l.atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
 
         String[] keySplited = key.split(String.valueOf(epoque));
-        int programmation_id = Integer.parseInt(keySplited[1].substring(0,1));
+        int programmation_id = Integer.parseInt(keySplited[1].substring(0, 1));
 
         UserServiceImp serviceImp = new UserServiceImp();
         Programmation programmation = serviceImp.getProgrammation(programmation_id);
@@ -121,12 +128,13 @@ public class ConsultationController implements Initializable {
 
     public void valider(ActionEvent actionEvent) {
 
-        //on valide une consultation seulement si la maladie est indiquee
-        if(maladieLabel.getText() != null && maladieLabel.getText().length() > 0
-                && nomPatient.getText() != null && nomPatient.getText().length() > 0
-                && prenomPatient.getText() != null && prenomPatient.getText().length() > 0){
+        if (validerButton.getText().equals("VALIDER")) {
 
-            if(validerButton.getText().equals("VALIDER")){
+            //on valide une consultation seulement si la maladie est indiquee
+            if (maladieLabel.getText() != null && maladieLabel.getText().length() > 0
+                    && nomPatient.getText() != null && nomPatient.getText().length() > 0
+                    && prenomPatient.getText() != null && prenomPatient.getText().length() > 0) {
+
                 Consultation cst = new Consultation(codePatient, nomPatient.getText(), prenomPatient.getText(),
                         medecinUser.getCodeUnique(), prenomMedecin.getText(), prenomMedecin.getText());
                 cst.setDateVisite(LocalDate.now());
@@ -146,18 +154,19 @@ public class ConsultationController implements Initializable {
                 Recette recette = new Recette("label1", "detail1", medecinUser.getId(), 1, LocalDate.now());
                 serviceImp.addRecette(recette);
 
-                Recette recetteSaved = serviceImp.getRecetteByMedecinAndDateAndPharnacien(medecinUser.getId(),  1, java.sql.Date.valueOf(recette.getDate()));
+                Recette recetteSaved = serviceImp.getRecetteByMedecinAndDateAndPharnacien(medecinUser.getId(), 1, java.sql.Date.valueOf(recette.getDate()));
 
                 //On sauvegarde la maladie detectee lors de la consultation
                 Maladie maladie = new Maladie(maladieLabel.getText(), description.getText(),
                         cstResult.getConsultation_id(), recetteSaved.getRecette_id());
                 serviceImp.addMaladie(maladie);
-
             }
 
-            ((Stage)((Node)actionEvent.getSource()).getScene().getWindow()).close();
 
         }
 
+        ((Stage) ((Node) actionEvent.getSource()).getScene().getWindow()).close();
+
     }
+
 }

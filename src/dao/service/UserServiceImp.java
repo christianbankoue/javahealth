@@ -514,4 +514,36 @@ public class UserServiceImp implements IUserService {
         return 0;
 
     }
+
+    public Maladie getMaladieByConsultationId(int consultation_id) {
+
+        String sql = "SELECT * FROM MALADIES WHERE consultation_id = ? ";
+
+        Maladie maladie = new Maladie();
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setInt(1, consultation_id);
+
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+                String nom = rs.getString("nom");
+                String description = rs.getString("description");
+                int maladie_id = rs.getInt("maladie_id");
+                int recette_id = rs.getInt("recette_id");
+
+                maladie = new Maladie(nom, description, consultation_id, recette_id);
+                maladie.setMaladie_id(maladie_id);
+
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return maladie;
+    }
 }
