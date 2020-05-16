@@ -1,8 +1,8 @@
 package model;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 //STEP 1
@@ -23,12 +23,23 @@ public class Consultation {
     private String prenomMedecin;
 
     //--//
-    private Date dateVisite;
+    private LocalDate dateVisite;
 
     //STEP 2
     //on valide la consultation puis on ajouter maladie ou ne rien faire
     private List<Maladie> maladies = new ArrayList<>();
 
+    public Consultation() {
+    }
+
+    public Consultation(String codeUniquePatient, String namePatient, String prenomPatient, String codeUniqueMedecin, String nameMedecin, String prenomMedecin) {
+        this.codeUniquePatient = codeUniquePatient;
+        this.namePatient = namePatient;
+        this.prenomPatient = prenomPatient;
+        this.codeUniqueMedecin = codeUniqueMedecin;
+        this.nameMedecin = nameMedecin;
+        this.prenomMedecin = prenomMedecin;
+    }
 
     public String getCodeUniquePatient() {
         return codeUniquePatient;
@@ -78,11 +89,11 @@ public class Consultation {
         this.prenomMedecin = prenomMedecin;
     }
 
-    public Date getDateVisite() {
+    public LocalDate getDateVisite() {
         return dateVisite;
     }
 
-    public void setDateVisite(Date dateVisite) {
+    public void setDateVisite(LocalDate dateVisite) {
         this.dateVisite = dateVisite;
     }
 

@@ -2,6 +2,7 @@ package dao.service;
 
 import dao.basededonne.DB;
 import dao.service.serviceI.IUserService;
+import model.Consultation;
 import model.Programmation;
 import model.UserCompte;
 import model.Utilisateur;
@@ -20,7 +21,7 @@ public class UserServiceImp implements IUserService {
 
     public int signUp(UserCompte userCompte){
 
-        String sql = "INSERT INTO USERCOMPTES (name, prenom, email, password, codeunique, role_id, pmdical) values (?,?,?,?,?,?,?) ";
+        String sql = "INSERT INTO USERCOMPTES (name, prenom, email, password, codeunique, role_id, pmedical) values (?,?,?,?,?,?,?) ";
 
         try{
             db.initPrepar(sql);
@@ -34,19 +35,19 @@ public class UserServiceImp implements IUserService {
 
             if(userCompte.isAdmin()){
                 pstm.setInt(6, RoleEnum.ADMIN.getIdentifiant());
-
+                pstm.setString(7, null);
             }else if(userCompte.isPersonnelmedicale() ){
                 pstm.setInt(6, RoleEnum.PERSONNEL_MEDICAL.getIdentifiant());
                 pstm.setString(7, userCompte.getTypePersonnelMedical());
             }else if(userCompte.isFournisseur()){
                 pstm.setInt(6, RoleEnum.FOURNISSEUR.getIdentifiant());
-
+                pstm.setString(7, null);
             }else if(userCompte.isPharmatien()){
                 pstm.setInt(6, RoleEnum.PHARMACIEN.getIdentifiant());
-
+                pstm.setString(7, null);
             }else{
                 pstm.setInt(6, RoleEnum.PATIENT.getIdentifiant());
-
+                pstm.setString(7, null);
             }
 
             int rs = db.executeMaj();
@@ -81,7 +82,9 @@ public class UserServiceImp implements IUserService {
 
                 utilisateur = new Utilisateur(id, name, prenom, email, password, codeUnique);
                 utilisateur.setRole(RoleEnum.getRoleById(roleId));
-                utilisateur.setPersonnelMedical(PersonnelMedicalEnum.valueOf(typePersonnelMedical));
+                if(typePersonnelMedical != null){
+                    utilisateur.setPersonnelMedical(PersonnelMedicalEnum.valueOf(typePersonnelMedical));
+                }
                 return utilisateur;
             }
 
@@ -223,13 +226,19 @@ public class UserServiceImp implements IUserService {
 
             while (rs.next()) {
                 String domaineMedical = rs.getString("domaineMedical");
+                String namePatient = rs.getString("namePatient");
+                String prenomPatient = rs.getString("prenomPatient");
                 LocalDate date = (rs.getDate("date")).toLocalDate();
                 String hospital = rs.getString("hospital");
                 String medecinFullName = rs.getString("medecinFullName");
+                String codePatient = rs.getString("codePatient");
 
                 programmation.setDomaineMedical(domaineMedical);
                 programmation.setDate(date);
                 programmation.setHospital(hospital);
+                programmation.setCodePatient(codePatient);
+                programmation.setNamePatient(namePatient);
+                programmation.setPrenomPatient(prenomPatient);
                 programmation.setMedecinFullName(medecinFullName);
             }
 
@@ -286,9 +295,106 @@ public class UserServiceImp implements IUserService {
         return programmations;
     }
 
-    public int delProgrammation(Programmation pg) {
+    public int addConsultation(Consultation cs) {
+        String sql = "INSERT INTO CONSULTATIONS " +
+                "(codeUniquePatient, namePatient, prenomPatient, codeUniqueMedecin, nameMedecin, prenomMedecin, dateVisite)" +
+                " values (?,?,?,?,?,?,?) ";
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setString(1,cs.getCodeUniquePatient());
+            pstm.setString(2,cs.getNamePatient());
+            pstm.setString(3,cs.getPrenomPatient());
+            pstm.setString(4,cs.getCodeUniqueMedecin());
+            pstm.setString(5,cs.getNameMedecin());
+            pstm.setString(6, cs.getPrenomMedecin());
+            java.sql.Date sqlDate = java.sql.Date.valueOf(cs.getDateVisite());
+            pstm.setDate(7, sqlDate);
+
+            int rs = db.executeMaj();
+            return rs;
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
         return 0;
     }
 
+    public Consultation getConsultationByCodeUniqueAndDate(String codeUniquePatient, String codeUniqueMedecin, java.sql.Date sqlDate){
+        String sql = "SELECT * FROM CONSULTATIONS WHERE " +
+                "codeUniquePatient = ? and codeUniqueMedecin = ? and date = ? ";
 
+        Consultation consultation = new Consultation();
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setString(1,codeUniquePatient);
+            pstm.setString(1,codeUniqueMedecin);
+            pstm.setDate(1, sqlDate);
+
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+
+                int consultation_id = rs.getInt("consultation_id");
+                String namePatient = rs.getString("namePatient");
+                String prenomPatient = rs.getString("prenomPatient");
+                String nameMedecin = rs.getString("nameMedecin");
+                String prenomMedecin = rs.getString("prenomMedecin");
+
+                consultation = new Consultation(codeUniquePatient, namePatient, prenomPatient,
+                        codeUniqueMedecin, nameMedecin, prenomMedecin);
+                consultation.setConsultation_id(consultation_id);
+
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return consultation;
+    }
+
+    public List<Consultation> getConsultationByCodeUnique(String codeUniqueMedecin) {
+
+        String sql = "SELECT * FROM CONSULTATIONS WHERE codeUniqueMedecin = ? ";
+
+        List<Consultation> consultations = new ArrayList<>();
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setString(1,codeUniqueMedecin);
+
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+
+                int consultation_id = rs.getInt("consultation_id");
+                String codeUniquePatient  = rs.getString("codeUniquePatient");
+                String namePatient = rs.getString("namePatient");
+                String prenomPatient = rs.getString("prenomPatient");
+                String nameMedecin = rs.getString("nameMedecin");
+                String prenomMedecin = rs.getString("prenomMedecin");
+
+                LocalDate dateVisite = (rs.getDate("dateVisite")).toLocalDate();
+
+                Consultation consultation = new Consultation(codeUniquePatient, namePatient, prenomPatient,
+                        codeUniqueMedecin, nameMedecin, prenomMedecin);
+                consultation.setConsultation_id(consultation_id);
+                consultation.setDateVisite(dateVisite);
+
+                consultations.add(consultation);
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return consultations;
+    }
 }

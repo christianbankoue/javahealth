@@ -157,9 +157,9 @@ public class GestionConsultaionController implements Initializable {
             String medecinFullName = utilisateur.getName()+ " - " +utilisateur.getPrenom();
             UserServiceImp serviceImp = new UserServiceImp();
             List<Programmation> programmations = serviceImp.getAllProgrammationByMedecin(medecinFullName);
-            System.out.println(programmations.size());
+
             // pour chaque programmation on a un nom et le prenom du patient.
-            pc.injectUtilisateur(utilisateur, null);
+            pc.injectUtilisateur(utilisateur, programmations);
 
             Scene scene = new Scene(root);
             popupwindow.setScene(scene);
