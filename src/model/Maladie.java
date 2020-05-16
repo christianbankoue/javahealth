@@ -6,7 +6,7 @@ public class Maladie {
     private int maladie_id;
     private String nom;
     private String description;
-    private String consultationCode;
+    private int consultation_id;
 
     //STEP 3
     //on attache une recette que l on sauvegarde
@@ -28,13 +28,9 @@ public class Maladie {
         this.description = description;
     }
 
-    public String getConsultationCode() {
-        return consultationCode;
-    }
+    public int getConsultation_id() { return consultation_id; }
 
-    public void setConsultationCode(String consultationCode) {
-        this.consultationCode = consultationCode;
-    }
+    public void setConsultation_id(int consultation_id) { this.consultation_id = consultation_id; }
 
     public int getMaladie_id() {
         return maladie_id;
