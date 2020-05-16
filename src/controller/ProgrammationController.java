@@ -39,6 +39,10 @@ public class ProgrammationController implements Initializable {
     public DatePicker datePickerS;
     @FXML
     public SplitMenuButton medecinList;
+    @FXML
+    public SplitMenuButton hopitalList;
+    @FXML
+    public SplitMenuButton domaineList;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -84,6 +88,9 @@ public class ProgrammationController implements Initializable {
         domaineMedicalselected.setText(domaineMedical);
         hopitalSelected.setText(hospital);
         medecinSelected.setText(medecinFullName);
+        medecinList.setDisable(true);
+        domaineList.setDisable(true);
+        hopitalList.setDisable(true);
         datePickerS.setValue(date);
         datePickerS.setDisable(true);
         valideB.setText("Fermer");
