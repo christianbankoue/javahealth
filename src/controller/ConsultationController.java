@@ -15,6 +15,7 @@ import model.*;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -83,7 +84,7 @@ public class ConsultationController implements Initializable {
                     programmation.getDate().getMonth().toString() + "/" +
                     programmation.getDate().getYear();
 
-            Long epoque = (programmation.getDate().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
+            Long epoque = (programmation.getDate().toLocalDate().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
             String key = String.valueOf(epoque + "" + programmation.getProgrammation_id() + "" + String.valueOf(epoque).hashCode());
             listViewPg.getItems().add(
                     key + " # " + programmation.getNamePatient() + " # " + date);
@@ -137,24 +138,24 @@ public class ConsultationController implements Initializable {
 
                 Consultation cst = new Consultation(codePatient, nomPatient.getText(), prenomPatient.getText(),
                         medecinUser.getCodeUnique(), prenomMedecin.getText(), prenomMedecin.getText());
-                cst.setDateVisite(LocalDate.now());
+                cst.setDateVisite(LocalDateTime.now());
 
                 //ajout de la consultation
                 UserServiceImp serviceImp = new UserServiceImp();
                 int result = serviceImp.addConsultation(cst);
 
                 //on recupere la dite consultation de la base de donnees
-                java.sql.Date sqlDate = java.sql.Date.valueOf(cst.getDateVisite());
+                java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf(cst.getDateVisite());
                 Consultation cstResult = serviceImp.getCstByCodeUAndDate(cst.getCodeUniquePatient(),
                         cst.getCodeUniqueMedecin(), sqlDate);
 
                 System.out.println(cstResult);
 
                 //On sauvegarde la recette
-                Recette recette = new Recette("label1", "detail1", medecinUser.getId(), 1, LocalDate.now());
+                Recette recette = new Recette("label1", "detail1", medecinUser.getId(), 1, LocalDateTime.now());
                 serviceImp.addRecette(recette);
 
-                Recette recetteSaved = serviceImp.getRecetteByMedecinAndDateAndPharnacien(medecinUser.getId(), 1, java.sql.Date.valueOf(recette.getDate()));
+                Recette recetteSaved = serviceImp.getRecetteByMedecinAndDateAndPharnacien(medecinUser.getId(), 1, java.sql.Timestamp.valueOf(recette.getDate()));
 
                 //On sauvegarde la maladie detectee lors de la consultation
                 Maladie maladie = new Maladie(maladieLabel.getText(), description.getText(),

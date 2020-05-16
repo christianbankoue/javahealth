@@ -1,7 +1,7 @@
 package model;
 
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class Consultation {
     private String prenomMedecin;
 
     //--//
-    private LocalDate dateVisite;
+    private LocalDateTime dateVisite;
 
     //STEP 2
     //on valide la consultation puis on ajouter maladie ou ne rien faire
@@ -89,11 +89,11 @@ public class Consultation {
         this.prenomMedecin = prenomMedecin;
     }
 
-    public LocalDate getDateVisite() {
+    public LocalDateTime getDateVisite() {
         return dateVisite;
     }
 
-    public void setDateVisite(LocalDate dateVisite) {
+    public void setDateVisite(LocalDateTime dateVisite) {
         this.dateVisite = dateVisite;
     }
 

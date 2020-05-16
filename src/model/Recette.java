@@ -1,6 +1,6 @@
 package model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 //STEP 3
 public class Recette {
@@ -9,14 +9,14 @@ public class Recette {
     private String label;
     private String detail;
 
-    private LocalDate date;
+    private LocalDateTime date;
     private int medecin_id;
     private int pharmacien_id;
 
     public Recette() {
     }
 
-    public Recette(String label, String detail, int medecin_id, int pharmacien_id, LocalDate date) {
+    public Recette(String label, String detail, int medecin_id, int pharmacien_id, LocalDateTime date) {
         this.label = label;
         this.detail = detail;
         this.medecin_id = medecin_id;
@@ -64,11 +64,11 @@ public class Recette {
         this.pharmacien_id = pharmacien_id;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 }

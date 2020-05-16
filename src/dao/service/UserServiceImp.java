@@ -8,7 +8,7 @@ import model.enums.RoleEnum;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,12 +139,9 @@ public class UserServiceImp implements IUserService {
             pstm.setString(3,pg.getPrenomPatient());
             pstm.setString(4,pg.getDomaineMedical());
 
-            // pstm.setObject(5, pg.getDate());
-            // On va le recuperer ainsi:
-            // LocalDate localDate = ResultSet.getObject( 1 , LocalDate.class );
-
-            java.sql.Date sqlDate = java.sql.Date.valueOf( pg.getDate() );
-            pstm.setDate(5, sqlDate);
+            //java.sql.Date sqlDate = java.sql.Date.valueOf( pg.getDate() );
+            java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf( pg.getDate() );
+            pstm.setTimestamp(5, sqlDate);
             // On va le recuperer ainsi:
             // LocalDate localDate = sqlDate.toLocalDate();
 
@@ -180,7 +177,7 @@ public class UserServiceImp implements IUserService {
             while (rs.next()) {
                 int programmation_id = rs.getInt("programmation_id");
                 String domaineMedical = rs.getString("domaineMedical");
-                LocalDate date = (rs.getDate("date")).toLocalDate();
+                LocalDateTime date = (rs.getTimestamp("date")).toLocalDateTime();
                 String hospital = rs.getString("hospital");
                 String medecinFullName = rs.getString("medecinFullName");
                 int consultation_id = rs.getInt("consultation_id");
@@ -225,7 +222,7 @@ public class UserServiceImp implements IUserService {
                 String domaineMedical = rs.getString("domaineMedical");
                 String namePatient = rs.getString("namePatient");
                 String prenomPatient = rs.getString("prenomPatient");
-                LocalDate date = (rs.getDate("date")).toLocalDate();
+                LocalDateTime date = (rs.getTimestamp("date")).toLocalDateTime();
                 String hospital = rs.getString("hospital");
                 String medecinFullName = rs.getString("medecinFullName");
                 String codePatient = rs.getString("codePatient");
@@ -267,7 +264,7 @@ public class UserServiceImp implements IUserService {
                 String namePatient = rs.getString("namePatient");
                 String prenomPatient = rs.getString("prenomPatient");
                 String domaineMedical = rs.getString("domaineMedical");
-                LocalDate date = (rs.getDate("date")).toLocalDate();
+                LocalDateTime date = (rs.getTimestamp("date")).toLocalDateTime();
                 String hospital = rs.getString("hospital");
 
 
@@ -306,8 +303,8 @@ public class UserServiceImp implements IUserService {
             pstm.setString(4,cs.getCodeUniqueMedecin());
             pstm.setString(5,cs.getNameMedecin());
             pstm.setString(6, cs.getPrenomMedecin());
-            java.sql.Date sqlDate = java.sql.Date.valueOf(cs.getDateVisite());
-            pstm.setDate(7, sqlDate);
+            java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf(cs.getDateVisite());
+            pstm.setTimestamp(7, sqlDate);
 
             int rs = db.executeMaj();
             return rs;
@@ -318,7 +315,7 @@ public class UserServiceImp implements IUserService {
         return 0;
     }
 
-    public Consultation getCstByCodeUAndDate(String codeUniquePatient, String codeUniqueMedecin, java.sql.Date sqlDate){
+    public Consultation getCstByCodeUAndDate(String codeUniquePatient, String codeUniqueMedecin, java.sql.Timestamp sqlDate){
         String sql = "SELECT * FROM CONSULTATIONS WHERE " +
                 "codeUniquePatient = ? and codeUniqueMedecin = ? and dateVisite = ? ";
 
@@ -329,7 +326,7 @@ public class UserServiceImp implements IUserService {
             PreparedStatement pstm = db.getPstm();
             pstm.setString(1,codeUniquePatient);
             pstm.setString(2,codeUniqueMedecin);
-            pstm.setDate(3, sqlDate);
+            pstm.setTimestamp(3, sqlDate);
 
             ResultSet rs = db.executeSelect();
 
@@ -377,7 +374,7 @@ public class UserServiceImp implements IUserService {
                 String nameMedecin = rs.getString("nameMedecin");
                 String prenomMedecin = rs.getString("prenomMedecin");
 
-                LocalDate dateVisite = (rs.getDate("dateVisite")).toLocalDate();
+                LocalDateTime dateVisite = (rs.getTimestamp("dateVisite")).toLocalDateTime();
 
                 Consultation consultation = new Consultation(codeUniquePatient, namePatient, prenomPatient,
                         codeUniqueMedecin, nameMedecin, prenomMedecin);
@@ -416,7 +413,7 @@ public class UserServiceImp implements IUserService {
                 String prenomMedecin = rs.getString("prenomMedecin");
                 String codeUniqueMedecin = rs.getString("codeUniqueMedecin");
 
-                LocalDate dateVisite = (rs.getDate("dateVisite")).toLocalDate();
+                LocalDateTime dateVisite = (rs.getTimestamp("dateVisite")).toLocalDateTime();
 
                 consultation = new Consultation(codeUniquePatient, namePatient, prenomPatient,
                         codeUniqueMedecin, nameMedecin, prenomMedecin);
@@ -445,8 +442,8 @@ public class UserServiceImp implements IUserService {
             pstm.setString(2,recette.getDetail());
             pstm.setInt(3,recette.getMedecin_id());
             pstm.setInt(4,recette.getPharmacien_id());
-            java.sql.Date sqlDate = java.sql.Date.valueOf(recette.getDate());
-            pstm.setDate(5,sqlDate);
+            java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf(recette.getDate());
+            pstm.setTimestamp(5,sqlDate);
 
             int rs = db.executeMaj();
             return rs;
@@ -458,7 +455,7 @@ public class UserServiceImp implements IUserService {
 
     }
 
-    public Recette getRecetteByMedecinAndDateAndPharnacien(int medecinId, int pharmacienId, java.sql.Date sqlDate){
+    public Recette getRecetteByMedecinAndDateAndPharnacien(int medecinId, int pharmacienId, java.sql.Timestamp sqlDate){
 
         String sql = "SELECT * FROM RECETTES WHERE " +
                 "medecin_id = ? and pharmacien_id = ? and date = ? ";
@@ -470,7 +467,7 @@ public class UserServiceImp implements IUserService {
             PreparedStatement pstm = db.getPstm();
             pstm.setInt(1,medecinId);
             pstm.setInt(2,pharmacienId);
-            pstm.setDate(3, sqlDate);
+            pstm.setTimestamp(3, sqlDate);
 
             ResultSet rs = db.executeSelect();
 
@@ -480,7 +477,7 @@ public class UserServiceImp implements IUserService {
                 String label = rs.getString("label");
                 String detail = rs.getString("detail");
 
-                recette = new Recette(label, detail, medecinId, pharmacienId, sqlDate.toLocalDate());
+                recette = new Recette(label, detail, medecinId, pharmacienId, sqlDate.toLocalDateTime());
                 recette.setRecette_id(recette_id);
             }
 

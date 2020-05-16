@@ -78,7 +78,7 @@ public class GestionConsultaionController implements Initializable {
                         programmation.getDate().getMonth().toString() +"/"+
                         programmation.getDate().getYear();
 
-                Long epoque = (programmation.getDate().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
+                Long epoque = (programmation.getDate().toLocalDate().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
                 String key = String.valueOf(epoque +""+ programmation.getProgrammation_id() +""+ String.valueOf(epoque).hashCode());
                 listViewPg.getItems().add(
                         key +" # "+ programmation.getNamePatient() + " # " +date);
@@ -107,7 +107,7 @@ public class GestionConsultaionController implements Initializable {
                     consultation.getDateVisite().getMonth().toString() +"/"+
                     consultation.getDateVisite().getYear();
 
-            Long epoque = (consultation.getDateVisite().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
+            Long epoque = (consultation.getDateVisite().toLocalDate().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
             String key = String.valueOf(epoque +""+ consultation.getConsultation_id() +""+ String.valueOf(epoque).hashCode());
 
             listViewCs.getItems().add(

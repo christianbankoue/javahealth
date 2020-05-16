@@ -12,7 +12,7 @@ import model.Utilisateur;
 import model.enums.DomaineMedical;
 
 import java.net.URL;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -80,7 +80,7 @@ public class ProgrammationController implements Initializable {
         prenomtxt.setText(utilisateur.getPrenom());
     }
 
-    public void injectProgrammation(String name, String prenom, String domaineMedical, String medecinFullName, String hospital, LocalDate date){
+    public void injectProgrammation(String name, String prenom, String domaineMedical, String medecinFullName, String hospital, LocalDateTime date){
         nametxt.setText(name);
         nametxt.setDisable(true);
         prenomtxt.setText(prenom);
@@ -91,7 +91,7 @@ public class ProgrammationController implements Initializable {
         medecinList.setDisable(true);
         domaineList.setDisable(true);
         hopitalList.setDisable(true);
-        datePickerS.setValue(date);
+        // datePickerS.setValue(date); TODO
         datePickerS.setDisable(true);
         valideB.setText("OK");
     }
@@ -107,7 +107,7 @@ public class ProgrammationController implements Initializable {
 
             //--//
             programmation.setDomaineMedical(DomaineMedical.valueOf(domaineMedicalselected.getText()).name());
-            programmation.setDate(datePickerS.getValue());
+            //programmation.setDate(datePickerS.getValue());  TODO
 
             //affichage des 2 du bas a l action du select sur les 2 du haut
             //on va simuller une recherche des hospitaux et medecin
