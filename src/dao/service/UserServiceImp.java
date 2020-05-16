@@ -126,6 +126,41 @@ public class UserServiceImp implements IUserService {
         return utilisateurs;
     }
 
+    public List<Utilisateur> getUtilisateurByRoleId(int roleId){
+
+        String sql = "SELECT * FROM USERCOMPTES WHERE role_id = ? ";
+        List<Utilisateur> utilisateurs = new ArrayList<>();
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setInt(1, roleId);
+
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+                int id = rs.getInt("usercompte_id");
+                String codeUnique = rs.getString("codeUnique");
+                String pmedical = rs.getString("pmedical");
+                String name = rs.getString("name");
+                String prenom = rs.getString("prenom");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+
+                Utilisateur utilisateur = new Utilisateur(id, name, prenom, email, password, codeUnique);
+                utilisateur.setRole(RoleEnum.getRoleById(roleId));
+                if(pmedical != null){
+                    utilisateur.setPersonnelMedical(PersonnelMedicalEnum.valueOf(pmedical));
+                }
+                utilisateurs.add(utilisateur);
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return utilisateurs;
+    }
+
     public int addProgrammation(Programmation pg) {
         String sql = "INSERT INTO PROGRAMMATIONS (codePatient, namePatient, prenomPatient, " +
                 "domaineMedical, date, hospital, medecinFullName) values (?,?,?,?,?,?,?) ";
@@ -289,7 +324,7 @@ public class UserServiceImp implements IUserService {
         return programmations;
     }
 
-    public int addConsultation(Consultation cs) {
+    public int addConsultation(Consultation cs, int hour, int min) {
         String sql = "INSERT INTO CONSULTATIONS " +
                 "(codeUniquePatient, namePatient, prenomPatient, codeUniqueMedecin, nameMedecin, prenomMedecin, dateVisite)" +
                 " values (?,?,?,?,?,?,?) ";
@@ -303,7 +338,8 @@ public class UserServiceImp implements IUserService {
             pstm.setString(4,cs.getCodeUniqueMedecin());
             pstm.setString(5,cs.getNameMedecin());
             pstm.setString(6, cs.getPrenomMedecin());
-            java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf(cs.getDateVisite());
+
+            java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf(cs.getDateVisite().atTime(hour, min));
             pstm.setTimestamp(7, sqlDate);
 
             int rs = db.executeMaj();
@@ -379,7 +415,7 @@ public class UserServiceImp implements IUserService {
                 Consultation consultation = new Consultation(codeUniquePatient, namePatient, prenomPatient,
                         codeUniqueMedecin, nameMedecin, prenomMedecin);
                 consultation.setConsultation_id(consultation_id);
-                consultation.setDateVisite(dateVisite);
+                consultation.setDateVisite(dateVisite.toLocalDate());
 
                 consultations.add(consultation);
             }
@@ -418,7 +454,7 @@ public class UserServiceImp implements IUserService {
                 consultation = new Consultation(codeUniquePatient, namePatient, prenomPatient,
                         codeUniqueMedecin, nameMedecin, prenomMedecin);
                 consultation.setConsultation_id(consultation_id);
-                consultation.setDateVisite(dateVisite);
+                consultation.setDateVisite(dateVisite.toLocalDate());
 
             }
 
