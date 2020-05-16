@@ -98,7 +98,7 @@ public class ProgrammationController implements Initializable {
 
     public void valider(ActionEvent event) {
 
-        if(!valideB.getText().equals("Fermer")){
+        if(!valideB.getText().equals("OK")){
             Programmation programmation = new Programmation();
 
             programmation.setCodePatient(utilisateur.getCodeUnique());

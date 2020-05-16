@@ -68,91 +68,101 @@ public class GestionConsultaionController implements Initializable {
         System.out.println("clicked on " + listViewPg.getSelectionModel().getSelectedItem());
         //158950080011374326664 - Merlin - 15/MAY/2020
 
-        String[] donnees = listViewPg.getSelectionModel().getSelectedItem().split("#");
+        String selectedItem = listViewPg.getSelectionModel().getSelectedItem();
+        if(selectedItem != null ){
+            String[] donnees = selectedItem.split("#");
+            String key = donnees[0].trim();
+            String namePatient = donnees[1].trim();
+            String date = donnees[2].trim();
 
-        String key = donnees[0].trim();
-        String namePatient = donnees[1].trim();
-        String date = donnees[2].trim();
+            String[] dateSplited = date.split("/");
+            String day = dateSplited[0];
+            String month = dateSplited[1];
+            String year = dateSplited[2];
+            LocalDate l = LocalDate.of(Integer.parseInt(year), Month.valueOf(month), Integer.parseInt(day));
 
-        String[] dateSplited = date.split("/");
-        String day = dateSplited[0];
-        String month = dateSplited[1];
-        String year = dateSplited[2];
-        LocalDate l = LocalDate.of(Integer.parseInt(year), Month.valueOf(month), Integer.parseInt(day));
+            Long epoque = (l.atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
 
-        Long epoque = (l.atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
+            String[] keySplited = key.split(String.valueOf(epoque));
+            int programmation_id = Integer.parseInt(keySplited[1].substring(0,1));
 
-        String[] keySplited = key.split(String.valueOf(epoque));
-        int programmation_id = Integer.parseInt(keySplited[1].substring(0,1));
+            UserServiceImp serviceImp = new UserServiceImp();
+            Programmation programmation = serviceImp.getProgrammation(programmation_id);
 
-        UserServiceImp serviceImp = new UserServiceImp();
-        Programmation programmation = serviceImp.getProgrammation(programmation_id);
+            try {
+                Stage popupwindow = new Stage();
+                popupwindow.initModality(Modality.APPLICATION_MODAL);
+                popupwindow.setTitle("Detail de votre programmation "+key);
 
-        try {
-            Stage popupwindow = new Stage();
-            popupwindow.initModality(Modality.APPLICATION_MODAL);
-            popupwindow.setTitle("Detail de votre programmation "+key);
+                FXMLLoader loader = new FXMLLoader();
+                Pane root = loader.load(getClass().getResource("./../vue/programmation.fxml").openStream());
 
-            FXMLLoader loader = new FXMLLoader();
-            Pane root = loader.load(getClass().getResource("./../vue/programmation.fxml").openStream());
+                ProgrammationController pc = loader.getController();
 
-            ProgrammationController pc = loader.getController();
+                pc.injectProgrammation( utilisateur.getName(),  utilisateur.getPrenom(),
+                        programmation.getDomaineMedical(), programmation.getMedecinFullName(), programmation.getHospital(), programmation.getDate());
 
-             pc.injectProgrammation( utilisateur.getName(),  utilisateur.getPrenom(),
-                     programmation.getDomaineMedical(), programmation.getMedecinFullName(), programmation.getHospital(), programmation.getDate());
+                Scene scene = new Scene(root);
+                popupwindow.setScene(scene);
+                popupwindow.showAndWait();
 
-            Scene scene = new Scene(root);
-            popupwindow.setScene(scene);
-            popupwindow.showAndWait();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
+
+
     }
 
     public void handleMouseClickCs(MouseEvent mouseEvent) {
-        System.out.println("clicked on " + listViewPg.getSelectionModel().getSelectedItem());
+        System.out.println("clicked on " + listViewCs.getSelectionModel().getSelectedItem());
         //158950080011374326664 - Merlin - 15/MAY/2020
 
-        String[] donnees = listViewPg.getSelectionModel().getSelectedItem().split("#");
+        String selectedItem = listViewCs.getSelectionModel().getSelectedItem();
+        if(selectedItem != null ){
 
-        String key = donnees[0].trim();
-        String namePatient = donnees[1].trim();
-        String date = donnees[2].trim();
+            String[] donnees = selectedItem.split("#");
 
-        String[] dateSplited = date.split("/");
-        String day = dateSplited[0];
-        String month = dateSplited[1];
-        String year = dateSplited[2];
-        LocalDate l = LocalDate.of(Integer.parseInt(year), Month.valueOf(month), Integer.parseInt(day));
+            String key = donnees[0].trim();
+            String namePatient = donnees[1].trim();
+            String date = donnees[2].trim();
 
-        Long epoque = (l.atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
+            String[] dateSplited = date.split("/");
+            String day = dateSplited[0];
+            String month = dateSplited[1];
+            String year = dateSplited[2];
+            LocalDate l = LocalDate.of(Integer.parseInt(year), Month.valueOf(month), Integer.parseInt(day));
 
-        String[] keySplited = key.split(String.valueOf(epoque));
-        int consultation_id = Integer.parseInt(keySplited[1].substring(0,1));
+            Long epoque = (l.atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
 
-        UserServiceImp serviceImp = new UserServiceImp();
-        Consultation consultation = serviceImp.getConsultationById(consultation_id);
+            String[] keySplited = key.split(String.valueOf(epoque));
+            int consultation_id = Integer.parseInt(keySplited[1].substring(0,1));
 
-        try {
-            Stage popupwindow = new Stage();
-            popupwindow.initModality(Modality.APPLICATION_MODAL);
-            popupwindow.setTitle("Detail de votre consultation "+key);
+            UserServiceImp serviceImp = new UserServiceImp();
+            Consultation consultation = serviceImp.getConsultationById(consultation_id);
 
-            FXMLLoader loader = new FXMLLoader();
-            Pane root = loader.load(getClass().getResource("./../vue/consultation.fxml").openStream());
+            try {
+                Stage popupwindow = new Stage();
+                popupwindow.initModality(Modality.APPLICATION_MODAL);
+                popupwindow.setTitle("Detail de votre consultation "+key);
 
-            ConsultationController pc = loader.getController();
+                FXMLLoader loader = new FXMLLoader();
+                Pane root = loader.load(getClass().getResource("./../vue/consultation.fxml").openStream());
 
-            pc.injectUtilisateur(utilisateur, consultation);
+                ConsultationController pc = loader.getController();
 
-            Scene scene = new Scene(root);
-            popupwindow.setScene(scene);
-            popupwindow.showAndWait();
+                pc.injectUtilisateur(utilisateur, consultation);
 
-        } catch (IOException e) {
-            e.printStackTrace();
+                Scene scene = new Scene(root);
+                popupwindow.setScene(scene);
+                popupwindow.showAndWait();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     public void detailProgrammation(Boolean edit){
