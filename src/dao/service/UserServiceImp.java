@@ -320,7 +320,7 @@ public class UserServiceImp implements IUserService {
 
     public Consultation getCstByCodeUAndDate(String codeUniquePatient, String codeUniqueMedecin, java.sql.Date sqlDate){
         String sql = "SELECT * FROM CONSULTATIONS WHERE " +
-                "codeUniquePatient = ? and codeUniqueMedecin = ? and date = ? ";
+                "codeUniquePatient = ? and codeUniqueMedecin = ? and dateVisite = ? ";
 
         Consultation consultation = new Consultation();
 
@@ -328,8 +328,8 @@ public class UserServiceImp implements IUserService {
             db.initPrepar(sql);
             PreparedStatement pstm = db.getPstm();
             pstm.setString(1,codeUniquePatient);
-            pstm.setString(1,codeUniqueMedecin);
-            pstm.setDate(1, sqlDate);
+            pstm.setString(2,codeUniqueMedecin);
+            pstm.setDate(3, sqlDate);
 
             ResultSet rs = db.executeSelect();
 
@@ -351,7 +351,7 @@ public class UserServiceImp implements IUserService {
         catch (Exception ex){
             ex.printStackTrace();
         }
-
+//TODO retourne une liste car le localdate n est pas precis donc il faut le LocalDateTime
         return consultation;
     }
 
@@ -469,8 +469,8 @@ public class UserServiceImp implements IUserService {
             db.initPrepar(sql);
             PreparedStatement pstm = db.getPstm();
             pstm.setInt(1,medecinId);
-            pstm.setInt(1,pharmacienId);
-            pstm.setDate(1, sqlDate);
+            pstm.setInt(2,pharmacienId);
+            pstm.setDate(3, sqlDate);
 
             ResultSet rs = db.executeSelect();
 

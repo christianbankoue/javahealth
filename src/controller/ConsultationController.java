@@ -84,9 +84,11 @@ public class ConsultationController implements Initializable {
 
         nomMedecin.setText(this.medecinUser.getName());
         prenomMedecin.setText(this.medecinUser.getPrenom());
+        validerButton.setText("Selectionner une programmation");
     }
 
     public void handleMouseClick(MouseEvent mouseEvent) {
+        validerButton.setText("VALIDER");
         validerButton.setDisable(false);
         System.out.println("clicked on " + listViewPg.getSelectionModel().getSelectedItem());
         //158950080011374326664 - Merlin - 15/MAY/2020
