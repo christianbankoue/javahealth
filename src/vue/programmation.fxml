@@ -6,7 +6,7 @@
 
 <GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProgrammationController">
     <children>
-        <AnchorPane prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: skyblue;">
+        <AnchorPane prefHeight="481.0" prefWidth="721.0" style="-fx-background-color: skyblue;">
             <children>
 
                 <FlowPane layoutX="199.0" layoutY="132.0" prefHeight="33.0" prefWidth="302.0" style="-fx-background-color: grey; -fx-border-radius: 5px; -fx-border-color: red;">
@@ -21,14 +21,14 @@
                         <TextField fx:id="prenomtxt" prefHeight="32.0" prefWidth="300.0" promptText="Firstname" />
                     </children>
                 </FlowPane>
-            <FlowPane layoutX="163.0" layoutY="358.0" prefHeight="34.0" prefWidth="133.0">
+            <FlowPane layoutX="44.0" layoutY="356.0" prefHeight="34.0" prefWidth="133.0">
                <children>
-                  <TextField disable="true" prefHeight="32.0" prefWidth="173.0" promptText="Medical domain" />
+                  <TextField fx:id="domaineMedicalselected" disable="true" prefHeight="32.0" prefWidth="173.0" promptText="Medical domain" />
                </children>
             </FlowPane>
 
 
-                <Button layoutX="305.0" layoutY="406.0" mnemonicParsing="false" onAction="#valider" prefHeight="26.0" prefWidth="89.0" style="-fx-background-color: clqir;" text="VALIDER" textFill="#a46a8c" />
+                <Button layoutX="305.0" layoutY="406.0" mnemonicParsing="false" onAction="#valider" prefHeight="26.0" prefWidth="89.0" style="-fx-background-color: clqir;" text="VALIDER" textFill="#a46a8c" underline="true" />
 
 
                 <Label layoutX="73.0" layoutY="133.0" prefHeight="30.0" prefWidth="90.0" text="Nom">
@@ -41,30 +41,40 @@
                         <Font size="18.0" />
                     </font>
                 </Label>
-            <DatePicker layoutX="200.0" layoutY="227.0" prefHeight="32.0" prefWidth="300.0" promptText="Choose a date" style="-fx-border-color: red; -fx-border-radius: 5px;" />
+            <DatePicker layoutX="200.0" layoutY="227.0" prefHeight="32.0" prefWidth="138.0" promptText="Choose a date" style="-fx-border-color: red; -fx-border-radius: 5px;" />
             <Label layoutX="73.0" layoutY="228.0" prefHeight="30.0" prefWidth="79.0" text="Date">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <SplitMenuButton layoutX="163.0" layoutY="332.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="174.0" text="Domaine medical">
+            <SplitMenuButton layoutX="44.0" layoutY="332.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="174.0" text="Domaine medical">
               <items>
-                  <MenuItem mnemonicParsing="false" text="CONTROLE OPHTALMOLOGIQUE" />
-                <MenuItem mnemonicParsing="false" text="ORL" />
-                <MenuItem mnemonicParsing="false" text="CONTROLE_DE_ROUTINE" />
+                  <MenuItem mnemonicParsing="false" onAction="#domaineMedical" text="CONTROLE OPHTALMOLOGIQUE" />
+                <MenuItem mnemonicParsing="false" onAction="#domaineMedical" text="ORL" />
+                <MenuItem mnemonicParsing="false" onAction="#domaineMedical" text="CONTROLE_DE_ROUTINE" />
               </items>
             </SplitMenuButton>
-            <SplitMenuButton layoutX="387.0" layoutY="332.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="174.0" text="Hopital">
+            <SplitMenuButton layoutX="262.0" layoutY="332.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="174.0" text="Hopital">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Action 1" />
-                  <MenuItem mnemonicParsing="false" text="Action 2" />
+                  <MenuItem mnemonicParsing="false" onAction="#hopitalun" text="Hopital 1" />
+                  <MenuItem mnemonicParsing="false" onAction="#hopitaldeux" text="Hopital 2" />
                </items>
             </SplitMenuButton>
-            <FlowPane layoutX="387.0" layoutY="359.0" prefHeight="32.0" prefWidth="166.0" style="-fx-background-color: skyblue;">
+            <FlowPane layoutX="262.0" layoutY="357.0" prefHeight="32.0" prefWidth="166.0" style="-fx-background-color: skyblue;">
                <children>
-                  <TextField disable="true" prefHeight="32.0" prefWidth="173.0" promptText="Hospital" />
+                  <TextField fx:id="hopitalSelected" disable="true" prefHeight="32.0" prefWidth="173.0" promptText="Hospital" />
                </children>
             </FlowPane>
+            <SplitMenuButton layoutX="480.0" layoutY="332.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="174.0" text="Medecin">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#medecinSelect" text="Medecin 1" />
+                  <MenuItem mnemonicParsing="false" onAction="#medecinSelect" text="Medecin 2" />
+               </items>
+            </SplitMenuButton>
+            <FlowPane disable="true" layoutX="480.0" layoutY="357.0" prefHeight="32.0" prefWidth="174.0">
+               <children>
+                  <TextField fx:id="medecinSelected" prefHeight="32.0" prefWidth="174.0" text="Medecin" />
+               </children></FlowPane>
 
             </children>
         </AnchorPane>
