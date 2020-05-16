@@ -11,7 +11,7 @@
                 <FlowPane layoutX="44.0" layoutY="356.0" prefHeight="34.0" prefWidth="133.0" />
 
 
-                <Button fx:id="valider" layoutX="316.0" layoutY="431.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="89.0" style="-fx-background-color: clqir;" text="VALIDER" textFill="#a46a8c" underline="true" />
+                <Button fx:id="validerButton" onAction="#valider"  layoutX="316.0" layoutY="431.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="89.0" style="-fx-background-color: clqir;" text="VALIDER" textFill="#a46a8c" underline="true" />
 
 
                 <Label layoutX="105.0" layoutY="132.0" prefHeight="30.0" prefWidth="189.0" text="Inforamtions patients">
