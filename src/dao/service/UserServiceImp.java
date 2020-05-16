@@ -9,6 +9,9 @@ import model.enums.RoleEnum;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserServiceImp implements IUserService {
 
@@ -121,6 +124,87 @@ public class UserServiceImp implements IUserService {
             ex.printStackTrace();
         }
         return 0;
+    }
+
+    public List<Programmation> getAllProgrammation(String codePatient, String namePatient, String prenomPatient){
+
+        String sql = "SELECT * FROM PROGRAMMATIONS WHERE" +
+                " codePatient = ? and namePatient = ? and prenomPatient = ?";
+
+        List<Programmation> programmations = new ArrayList<>();
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setString(1, codePatient);
+            pstm.setString(2, namePatient);
+            pstm.setString(3, prenomPatient);
+
+            ResultSet rs = db.executeSelect();
+
+
+            while (rs.next()) {
+                int programmation_id = rs.getInt("programmation_id");
+                String domaineMedical = rs.getString("domaineMedical");
+                LocalDate date = (rs.getDate("date")).toLocalDate();
+                String hospital = rs.getString("hospital");
+                String medecinFullName = rs.getString("medecinFullName");
+                int consultation_id = rs.getInt("consultation_id");
+
+                Programmation programmation = new Programmation();
+                programmation.setProgrammation_id(programmation_id);
+                programmation.setCodePatient(codePatient);
+                programmation.setNamePatient(namePatient);
+                programmation.setPrenomPatient(prenomPatient);
+                programmation.setDomaineMedical(domaineMedical);
+                programmation.setDate(date);
+                programmation.setHospital(hospital);
+                programmation.setMedecinFullName(medecinFullName);
+                programmation.setConsultation_id(consultation_id);
+
+                programmations.add(programmation);
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return programmations;
+    }
+
+    public Programmation getProgrammation(int id){
+
+        String sql = "SELECT * FROM PROGRAMMATIONS WHERE programmation_id = ? ";
+
+        Programmation programmation = new Programmation();
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setInt(1, id);
+
+            ResultSet rs = db.executeSelect();
+
+
+            while (rs.next()) {
+                String domaineMedical = rs.getString("domaineMedical");
+                LocalDate date = (rs.getDate("date")).toLocalDate();
+                String hospital = rs.getString("hospital");
+                String medecinFullName = rs.getString("medecinFullName");
+
+                programmation.setDomaineMedical(domaineMedical);
+                programmation.setDate(date);
+                programmation.setHospital(hospital);
+                programmation.setMedecinFullName(medecinFullName);
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return programmation;
     }
 
     public int delProgrammation(Programmation pg) {

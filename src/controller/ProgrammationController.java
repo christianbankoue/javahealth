@@ -5,6 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -19,6 +21,7 @@ import java.util.ResourceBundle;
 public class ProgrammationController  implements Initializable {
 
 
+
     Utilisateur utilisateur;
 
     @FXML
@@ -31,6 +34,10 @@ public class ProgrammationController  implements Initializable {
     private TextField domaineMedicalselected;
     @FXML
     private TextField medecinSelected;
+    @FXML
+    public Button valideB;
+    @FXML
+    public DatePicker datePickerS;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -62,32 +69,43 @@ public class ProgrammationController  implements Initializable {
         prenomtxt.setText(utilisateur.getPrenom());
     }
 
+    public void injectProgrammation(String name, String prenom, String domaineMedical, String medecinFullName, String hospital, LocalDate date){
+        nametxt.setText(name);
+        nametxt.setDisable(true);
+        prenomtxt.setText(prenom);
+        prenomtxt.setDisable(true);
+        domaineMedicalselected.setText(domaineMedical);
+        hopitalSelected.setText(hospital);
+        medecinSelected.setText(medecinFullName);
+        datePickerS.setValue(date);
+        datePickerS.setDisable(true);
+        valideB.setText("Fermer");
+    }
+
     public void valider(ActionEvent event) {
 
-        Programmation programmation = new Programmation();
+        if(!valideB.getText().equals("Fermer")){
+            Programmation programmation = new Programmation();
 
-        programmation.setCodePatient(utilisateur.getCodeUnique());
-        programmation.setNamePatient(utilisateur.getName());
-        programmation.setPrenomPatient(utilisateur.getPrenom());
+            programmation.setCodePatient(utilisateur.getCodeUnique());
+            programmation.setNamePatient(utilisateur.getName());
+            programmation.setPrenomPatient(utilisateur.getPrenom());
 
-        //--//
-        programmation.setDomaineMedical(DomaineMedical.valueOf(domaineMedicalselected.getText()).name());
-        programmation.setDate( LocalDate.now());
+            //--//
+            programmation.setDomaineMedical(DomaineMedical.valueOf(domaineMedicalselected.getText()).name());
+            programmation.setDate(datePickerS.getValue());
 
-        //affichage des 2 du bas a l action du select sur les 2 du haut
-        //on va simuller une recherche des hospitaux et medecin
-        programmation.setHospital("Hospital 1");
-        programmation.setMedecinFullName("Jacques eric");
+            //affichage des 2 du bas a l action du select sur les 2 du haut
+            //on va simuller une recherche des hospitaux et medecin
+            programmation.setHospital(hopitalSelected.getText());
+            programmation.setMedecinFullName(medecinSelected.getText());
 
 
-        UserServiceImp serviceImp = new UserServiceImp();
-        serviceImp.addProgrammation(programmation);
+            UserServiceImp serviceImp = new UserServiceImp();
+            serviceImp.addProgrammation(programmation);
+        }
 
         ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
 
     }
-
-
-
-
 }
