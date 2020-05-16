@@ -97,7 +97,6 @@ public class GestionConsultaionController implements Initializable {
     public void detailProgrammation(Boolean edit){
 
         try {
-
             Stage popupwindow = new Stage();
             popupwindow.initModality(Modality.APPLICATION_MODAL);
             popupwindow.setTitle("Nouvelle programmation");
@@ -138,6 +137,36 @@ public class GestionConsultaionController implements Initializable {
                          key +" # "+ programmation.getNamePatient() + " # " +date);
             });
 
+        }
+    }
+
+    public void consultation(ActionEvent actionEvent) {
+        try {
+
+            Stage popupwindow = new Stage();
+            popupwindow.initModality(Modality.APPLICATION_MODAL);
+            popupwindow.setTitle("Nouvelle Consultation");
+
+            FXMLLoader loader = new FXMLLoader();
+            Pane root = loader.load(getClass().getResource("./../vue/consultation.fxml").openStream());
+
+            ConsultationController pc = loader.getController();
+
+
+            //il faut afficher cette liste et selectionner un item a fin de faire la consultation
+            String medecinFullName = utilisateur.getName()+ " - " +utilisateur.getPrenom();
+            UserServiceImp serviceImp = new UserServiceImp();
+            List<Programmation> programmations = serviceImp.getAllProgrammationByMedecin(medecinFullName);
+            System.out.println(programmations.size());
+            // pour chaque programmation on a un nom et le prenom du patient.
+            pc.injectUtilisateur(utilisateur, null);
+
+            Scene scene = new Scene(root);
+            popupwindow.setScene(scene);
+            popupwindow.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

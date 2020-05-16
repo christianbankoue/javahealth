@@ -64,16 +64,15 @@
                   <TextField fx:id="hopitalSelected" disable="true" prefHeight="32.0" prefWidth="173.0" promptText="Hospital" />
                </children>
             </FlowPane>
-            <SplitMenuButton layoutX="480.0" layoutY="332.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="174.0" text="Medecin">
+            <SplitMenuButton fx:id="medecinList" layoutX="480.0" layoutY="332.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="174.0" text="Medecin">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#medecinSelect" text="Medecin 1" />
-                  <MenuItem mnemonicParsing="false" onAction="#medecinSelect" text="Medecin 2" />
                </items>
             </SplitMenuButton>
             <FlowPane disable="true" layoutX="480.0" layoutY="357.0" prefHeight="32.0" prefWidth="174.0">
                <children>
                   <TextField fx:id="medecinSelected" prefHeight="32.0" prefWidth="174.0" text="Medecin" />
-               </children></FlowPane>
+               </children>
+            </FlowPane>
 
             </children>
         </AnchorPane>

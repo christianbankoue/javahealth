@@ -5,6 +5,7 @@ import dao.service.serviceI.IUserService;
 import model.Programmation;
 import model.UserCompte;
 import model.Utilisateur;
+import model.enums.PersonnelMedicalEnum;
 import model.enums.RoleEnum;
 
 import java.sql.PreparedStatement;
@@ -19,7 +20,7 @@ public class UserServiceImp implements IUserService {
 
     public int signUp(UserCompte userCompte){
 
-        String sql = "INSERT INTO USERCOMPTES (name, prenom, email, password, codeunique, role_id) values (?,?,?,?,?,?) ";
+        String sql = "INSERT INTO USERCOMPTES (name, prenom, email, password, codeunique, role_id, pmdical) values (?,?,?,?,?,?,?) ";
 
         try{
             db.initPrepar(sql);
@@ -31,14 +32,12 @@ public class UserServiceImp implements IUserService {
             pstm.setString(5,userCompte.getCodeUnique());
 
 
-
-
             if(userCompte.isAdmin()){
                 pstm.setInt(6, RoleEnum.ADMIN.getIdentifiant());
 
             }else if(userCompte.isPersonnelmedicale() ){
                 pstm.setInt(6, RoleEnum.PERSONNEL_MEDICAL.getIdentifiant());
-
+                pstm.setString(7, userCompte.getTypePersonnelMedical());
             }else if(userCompte.isFournisseur()){
                 pstm.setInt(6, RoleEnum.FOURNISSEUR.getIdentifiant());
 
@@ -49,7 +48,6 @@ public class UserServiceImp implements IUserService {
                 pstm.setInt(6, RoleEnum.PATIENT.getIdentifiant());
 
             }
-
 
             int rs = db.executeMaj();
             return rs;
@@ -62,7 +60,7 @@ public class UserServiceImp implements IUserService {
 
     public Utilisateur login(String name, String prenom, String email, String password){
 
-        String sql = "SELECT usercompte_id, codeUnique, role_id FROM USERCOMPTES WHERE name = ? and prenom = ? and email = ? and password = ? ";
+        String sql = "SELECT usercompte_id, codeUnique, role_id, pmedical FROM USERCOMPTES WHERE name = ? and prenom = ? and email = ? and password = ? ";
 
         try{
             db.initPrepar(sql);
@@ -79,9 +77,11 @@ public class UserServiceImp implements IUserService {
                 int id = rs.getInt("usercompte_id");
                 String codeUnique = rs.getString("codeUnique");
                 int roleId = rs.getInt("role_id");
+                String typePersonnelMedical = rs.getString("pmedical");
 
                 utilisateur = new Utilisateur(id, name, prenom, email, password, codeUnique);
                 utilisateur.setRole(RoleEnum.getRoleById(roleId));
+                utilisateur.setPersonnelMedical(PersonnelMedicalEnum.valueOf(typePersonnelMedical));
                 return utilisateur;
             }
 
@@ -90,6 +90,40 @@ public class UserServiceImp implements IUserService {
             ex.printStackTrace();
         }
         return new Utilisateur();
+    }
+
+    public List<Utilisateur> getUtilisateurByTyPeMedical(String pmedical){
+
+        String sql = "SELECT * FROM USERCOMPTES WHERE pmedical = ? ";
+        List<Utilisateur> utilisateurs = new ArrayList<>();
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setString(1, pmedical);
+
+
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+                int id = rs.getInt("usercompte_id");
+                String codeUnique = rs.getString("codeUnique");
+                int roleId = rs.getInt("role_id");
+                String name = rs.getString("name");
+                String prenom = rs.getString("prenom");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+
+                Utilisateur utilisateur = new Utilisateur(id, name, prenom, email, password, codeUnique);
+                utilisateur.setRole(RoleEnum.getRoleById(roleId));
+                utilisateur.setPersonnelMedical(PersonnelMedicalEnum.valueOf(pmedical));
+                utilisateurs.add(utilisateur);
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return utilisateurs;
     }
 
     public int addProgrammation(Programmation pg) {
@@ -205,6 +239,51 @@ public class UserServiceImp implements IUserService {
         }
 
         return programmation;
+    }
+
+    public List<Programmation>  getAllProgrammationByMedecin(String medecinFullName){
+
+        String sql = "SELECT * FROM PROGRAMMATIONS WHERE medecinFullName = ? ";
+
+        List<Programmation> programmations = new ArrayList<>();
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setString(1, medecinFullName);
+
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+                int programmation_id = rs.getInt("programmation_id");
+
+                String codePatient = rs.getString("codePatient");
+                String namePatient = rs.getString("namePatient");
+                String prenomPatient = rs.getString("prenomPatient");
+                String domaineMedical = rs.getString("domaineMedical");
+                LocalDate date = (rs.getDate("date")).toLocalDate();
+                String hospital = rs.getString("hospital");
+
+
+                Programmation programmation = new Programmation();
+                programmation.setProgrammation_id(programmation_id);
+                programmation.setCodePatient(codePatient);
+                programmation.setNamePatient(namePatient);
+                programmation.setPrenomPatient(prenomPatient);
+                programmation.setDomaineMedical(domaineMedical);
+                programmation.setDate(date);
+                programmation.setHospital(hospital);
+                programmation.setMedecinFullName(medecinFullName);
+
+                programmations.add(programmation);
+            }
+
+        }
+            catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return programmations;
     }
 
     public int delProgrammation(Programmation pg) {

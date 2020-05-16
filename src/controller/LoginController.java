@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.UserCompte;
 import model.Utilisateur;
+import model.enums.PersonnelMedicalEnum;
 import model.enums.RoleEnum;
 
 import java.io.IOException;
@@ -36,12 +37,8 @@ public class LoginController implements Initializable {
     private TextField role;
 
     private RoleEnum roleEnum = RoleEnum.INEXISTANT;
+    private PersonnelMedicalEnum personnelMedical = PersonnelMedicalEnum.MEDECIN;
 
-
-
-
-    // @FXML
-    // private TextField isUserConnected;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -52,28 +49,36 @@ public class LoginController implements Initializable {
     private void medecin(ActionEvent event){
         role.setText("medecin");
         roleEnum = RoleEnum.PERSONNEL_MEDICAL;
+        personnelMedical = PersonnelMedicalEnum.MEDECIN;
     }
 
     @FXML
     private void assistant(ActionEvent event){
         role.setText("Assistant");
         roleEnum = RoleEnum.PERSONNEL_MEDICAL;
+        personnelMedical = PersonnelMedicalEnum.ASSISTANT;
     }
+
     @FXML
     private void infirmier(ActionEvent event){
         role.setText("Infirmier");
         roleEnum= RoleEnum.PERSONNEL_MEDICAL;
+        personnelMedical = PersonnelMedicalEnum.INFIRMIERE;
     }
+
     @FXML
     private void patient(ActionEvent event){
         role.setText("Patient");
-    roleEnum = RoleEnum.PATIENT;
+        roleEnum = RoleEnum.PATIENT;
     }
+
     @FXML
     private void pharmacien(ActionEvent event){
         role.setText("Pharamcien");
         roleEnum = RoleEnum.PHARMACIEN;
-    }    @FXML
+    }
+
+    @FXML
     private void fournisseur(ActionEvent event){
         role.setText("Fournisseur");
         roleEnum = RoleEnum.FOURNISSEUR;
@@ -84,16 +89,6 @@ public class LoginController implements Initializable {
         String prenom = prenomtxt.getText();
         String email = emailtxt.getText();
         String password = passwordtxt.getText();
-
-
-
-//        String params = email+ "   " + password;
-//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//        alert.setTitle("Message");
-//        alert.setContentText(params);
-//        alert.showAndWait();
-
-        String params = name+ "   " + prenom+ "   " + email+ "   " + password;
 
         UserServiceImp userService = new UserServiceImp();
 
@@ -133,16 +128,22 @@ public class LoginController implements Initializable {
         String password = passwordtxt.getText();
         String codeUnique = codeutxt.getText();
         String roleUtilisateur  = role.getText();
-
-
-        String params = name+ "   " + prenom+ "   " + email+ "   " + password+ "  "+ codeUnique+ "  "+ roleUtilisateur ;
+        String pMedical  = personnelMedical.name();
 
         UserCompte userCompte = new UserCompte(name, prenom, email, password, codeUnique);
 
         if (roleEnum.getIdentifiant()== 1)
             userCompte.setAdmin(true);
-        else if(roleEnum.getIdentifiant() == 2 )
+        else if(roleEnum.getIdentifiant() == 2 ){
             userCompte.setPersonnelmedicale(true);
+            if(personnelMedical.name().equals(PersonnelMedicalEnum.ASSISTANT.name())){
+                userCompte.setTypePersonnelMedical("ASSISTANT");
+            }else if(personnelMedical.name().equals(PersonnelMedicalEnum.MEDECIN.name())){
+                userCompte.setTypePersonnelMedical("MEDECIN");
+            }else if(personnelMedical.name().equals(PersonnelMedicalEnum.INFIRMIERE.name())){
+                userCompte.setTypePersonnelMedical("INFIRMIERE");
+            }
+        }
         else if(roleEnum.getIdentifiant() == 3 )
             userCompte.setFournisseur(true);
         else if(roleEnum.getIdentifiant() == 4 )
@@ -183,6 +184,5 @@ public class LoginController implements Initializable {
             // isUserConnected.setText("Erreur signUp verifier vos informations");
         }
     }
-
 
 }

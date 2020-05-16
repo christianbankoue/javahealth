@@ -8,12 +8,9 @@ public class UserCompte {
     private String email;
     private String password;
     private String codeUnique;
-
+    private String typePersonnelMedical;
 
     private boolean admin;
-    private boolean medecin;
-    private boolean assistant;
-    private boolean infirmier;
     private boolean fournisseur;
     private boolean pharmatien;
     private boolean patient;
@@ -109,35 +106,19 @@ public class UserCompte {
         this.patient = patient;
     }
 
-    public boolean isMedecin() {
-        return medecin;
-    }
-
-    public void setMedecin(boolean medecin) {
-        this.medecin = medecin;
-    }
-
-    public boolean isAssistant() {
-        return assistant;
-    }
-
-    public void setAssistant(boolean assistant) {
-        this.assistant = assistant;
-    }
-
-    public boolean isInfirmier() {
-        return infirmier;
-    }
-
-    public void setInfirmier(boolean infirmier) {
-        this.infirmier = infirmier;
-    }
-
     public boolean isPersonnelmedicale() {
         return personnelmedicale;
     }
 
     public void setPersonnelmedicale(boolean personnelmedicale) {
         this.personnelmedicale = personnelmedicale;
+    }
+
+    public String getTypePersonnelMedical() {
+        return typePersonnelMedical;
+    }
+
+    public void setTypePersonnelMedical(String typePersonnelMedical) {
+        this.typePersonnelMedical = typePersonnelMedical;
     }
 }

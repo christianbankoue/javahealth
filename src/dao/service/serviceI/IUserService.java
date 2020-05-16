@@ -12,9 +12,13 @@ public interface IUserService {
 
     Utilisateur login(String name, String prenom, String email, String password);
 
+    List<Utilisateur> getUtilisateurByTyPeMedical(String pmedical);
+
     int addProgrammation(Programmation pg);
 
     List<Programmation> getAllProgrammation(String codePatient, String namePatient, String prenomPatient);
+
+    List<Programmation> getAllProgrammationByMedecin(String medecinFullName);
 
     Programmation getProgrammation(int id);
 

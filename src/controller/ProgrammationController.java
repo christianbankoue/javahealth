@@ -5,10 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Programmation;
 import model.Utilisateur;
@@ -16,13 +13,15 @@ import model.enums.DomaineMedical;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
-public class ProgrammationController  implements Initializable {
+public class ProgrammationController implements Initializable {
 
 
 
     Utilisateur utilisateur;
+
 
     @FXML
     private TextField nametxt;
@@ -38,11 +37,24 @@ public class ProgrammationController  implements Initializable {
     public Button valideB;
     @FXML
     public DatePicker datePickerS;
+    @FXML
+    public SplitMenuButton medecinList;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         nametxt.setText("...");
         prenomtxt.setText("...");
+
+        UserServiceImp serviceImp = new UserServiceImp();
+        List<Utilisateur> medecin = serviceImp.getUtilisateurByTyPeMedical("MEDECIN");
+        medecin.forEach(utilisateur -> {
+            MenuItem choice = new MenuItem(utilisateur.getName() +" - "+ utilisateur.getPrenom());
+            choice.setOnAction((e)-> {
+                medecinSelected.setText(choice.getText());
+            });
+            medecinList.getItems().add(choice);
+        });
+
     }
 
     public void hopitalun(ActionEvent event){
@@ -56,11 +68,6 @@ public class ProgrammationController  implements Initializable {
     public void domaineMedical(ActionEvent event){
         MenuItem mn = (MenuItem)event.getSource();
         domaineMedicalselected.setText(mn.getText());
-    }
-    public void medecinSelect(ActionEvent event) {
-        MenuItem menu = (MenuItem)event.getSource();
-        medecinSelected.setText(menu.getText());
-
     }
 
     public void injectUtilisateur(Utilisateur utilisateur){
