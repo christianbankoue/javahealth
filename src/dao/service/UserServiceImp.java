@@ -146,8 +146,11 @@ public class UserServiceImp implements IUserService {
                 String prenom = rs.getString("prenom");
                 String email = rs.getString("email");
                 String password = rs.getString("password");
+                int inactive = rs.getInt("inactive");
+
 
                 Utilisateur utilisateur = new Utilisateur(id, name, prenom, email, password, codeUnique);
+                utilisateur.setInactive(inactive);
                 utilisateur.setRole(RoleEnum.getRoleById(roleId));
                 if(pmedical != null){
                     utilisateur.setPersonnelMedical(PersonnelMedicalEnum.valueOf(pmedical));
@@ -195,6 +198,56 @@ public class UserServiceImp implements IUserService {
             ex.printStackTrace();
         }
         return utilisateur;
+    }
+
+    public List<Utilisateur> getAllUser(){
+        String sql = "SELECT * FROM USERCOMPTES";
+        List<Utilisateur> utilisateurs = new ArrayList<>();
+        try{
+            db.initPrepar(sql);
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+                int id = rs.getInt("usercompte_id");
+                int roleId = rs.getInt("role_id");
+                String codeUnique = rs.getString("codeUnique");
+                String pmedical = rs.getString("pmedical");
+                String name = rs.getString("name");
+                String prenom = rs.getString("prenom");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+
+                Utilisateur utilisateur = new Utilisateur(id, name, prenom, email, password, codeUnique);
+                utilisateur.setRole(RoleEnum.getRoleById(roleId));
+                if(pmedical != null){
+                    utilisateur.setPersonnelMedical(PersonnelMedicalEnum.valueOf(pmedical));
+                }
+                utilisateurs.add(utilisateur);
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return utilisateurs;
+    }
+
+    public int deleteUtilisateur(int usercompte_id){
+
+        String sql = "DELETE FROM USERCOMPTES WHERE " +
+                "usercompte_id = ? ";
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setInt(1,usercompte_id);
+            int rs = db.executeMaj();
+            return rs;
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return 0;
     }
 
     public int addProgrammation(Programmation pg) {
@@ -704,5 +757,23 @@ public class UserServiceImp implements IUserService {
         }
 
         return produits;
+    }
+
+    public int deleteProduit(int produit_id){
+
+        String sql = "DELETE FROM PRODUITS WHERE " +
+                "produit_id = ? ";
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setInt(1,produit_id);
+            int rs = db.executeMaj();
+            return rs;
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return 0;
     }
 }

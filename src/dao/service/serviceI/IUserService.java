@@ -11,6 +11,8 @@ public interface IUserService {
     List<Utilisateur> getUtilisateurByTyPeMedical(String pmedical);
     List<Utilisateur> getUtilisateurByRoleId(int roleId);
     Utilisateur getUtilisateurById(int id);
+    List<Utilisateur> getAllUser();
+    int deleteUtilisateur(int usercompte_id);
 
     int addProgrammation(Programmation pg);
     List<Programmation> getAllProgrammation(String codePatient, String namePatient, String prenomPatient);
@@ -30,5 +32,6 @@ public interface IUserService {
     Maladie getMaladieByConsultationId(int consultation_id);
 
     List<Produit> getAllProduit();
+    int deleteProduit(int produit_id);
 
 }

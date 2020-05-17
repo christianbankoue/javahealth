@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.collections.*?>
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1147.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GestionConsultaionController">
    <center>
       <AnchorPane prefHeight="600.0" prefWidth="894.0" style="-fx-background-color: skyblue;" BorderPane.alignment="CENTER">
@@ -61,12 +60,12 @@
                   </ListView>
                </children>
             </VBox>
-            <VBox fx:id="vbRecette1" layoutX="333.0" layoutY="57.0" prefHeight="288.0" prefWidth="343.0">
+            <VBox fx:id="vbProduit" layoutX="333.0" layoutY="57.0" prefHeight="288.0" prefWidth="343.0">
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </padding>
                <children>
-                  <ListView onMouseClicked="#handleMouseClickRc" prefHeight="228.0" prefWidth="303.0">
+                  <ListView fx:id="listProduit" onMouseClicked="#handleMouseClickProduit" prefHeight="228.0" prefWidth="303.0">
                      <items>
                         <FXCollections fx:factory="observableArrayList" />
                      </items>
@@ -83,9 +82,13 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <CheckBox layoutX="530.0" layoutY="39.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="121.0" text="Produits sans MAJ" />
-            <ListView layoutX="700.0" layoutY="76.0" prefHeight="502.0" prefWidth="250.0" />
-            <CheckBox layoutX="878.0" layoutY="39.0" mnemonicParsing="false" text="inactifs" />
+            <CheckBox fx:id="produitCB" layoutX="530.0" layoutY="39.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="121.0" text="Produits sans MAJ" />
+            <ListView fx:id="listUtilisateur" layoutX="700.0"  onMouseClicked="#handleMouseClickUtilisateur" layoutY="76.0" prefHeight="502.0" prefWidth="250.0" >
+               <items>
+                  <FXCollections fx:factory="observableArrayList" />
+               </items>
+            </ListView>
+            <CheckBox fx:id="utilisateurCB" layoutX="878.0" layoutY="39.0" mnemonicParsing="false" text="inactifs" />
 
          </children>
       </AnchorPane>

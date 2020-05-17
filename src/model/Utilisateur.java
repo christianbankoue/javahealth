@@ -12,7 +12,7 @@ public class Utilisateur {
     protected String email;
     protected String password;
     protected String codeUnique;
-
+    protected int inactive;
 
     private RoleEnum role;
     private FournisseurEnum fournisseur;
@@ -103,6 +103,14 @@ public class Utilisateur {
         this.personnelMedical = personnelMedical;
     }
 
+    public int getInactive() {
+        return inactive;
+    }
+
+    public void setInactive(int inactive) {
+        this.inactive = inactive;
+    }
+
     @Override
     public String toString() {
         return "Utilisateur{" +
@@ -112,6 +120,7 @@ public class Utilisateur {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", codeUnique='" + codeUnique + '\'' +
+                ", inactive=" + inactive +
                 ", role=" + (role != null ? role.name() : "") +
                 ", fournisseur=" + (fournisseur != null ? fournisseur.name() : "")  +
                 ", personnelMedical=" + (personnelMedical != null ? personnelMedical.name() : "")  +
