@@ -28,6 +28,8 @@ import java.util.ResourceBundle;
 public class GestionConsultaionController implements Initializable {
 
 
+    public Label listproduitlabel;
+    public Label listeuserlabel;
     Utilisateur utilisateur;
 
     @FXML
@@ -87,6 +89,7 @@ public class GestionConsultaionController implements Initializable {
         //si l utilisateur est admin
         if(utilisateur.getRole().getIdentifiant() == 1){
             consultationKey.setDisable(true);
+
             System.out.println("L'utilisateur est un admin");
             getAllUser();
             getAllProduit();
@@ -94,6 +97,14 @@ public class GestionConsultaionController implements Initializable {
         //si l utilisateur est fournisseur
         else if(utilisateur.getRole().getIdentifiant() == 3){
             consultationKey.setDisable(true);
+            listViewCs.setVisible(false);
+            listCsLabel.setVisible(false);
+            listRecette.setVisible(false);
+            listeuserlabel.setVisible(false);
+            listUtilisateur.setVisible(false);
+            utilisateurCB.setVisible(false);
+
+
             System.out.println("L'utilisateur est un fournisseur");
         }
         //si l utilisateur est un pharmacien
@@ -101,6 +112,14 @@ public class GestionConsultaionController implements Initializable {
             consultationKey.setDisable(true);
             listViewCs.setVisible(false);
             listCsLabel.setVisible(false);
+            listUtilisateur.setVisible(false);
+            listProduit.setVisible(false);
+            listproduitlabel.setVisible(false);
+            listeuserlabel.setVisible(false);
+            utilisateurCB.setVisible(false);
+            produitCB.setVisible(false);
+            vbRecette.setVisible(false);
+
             getAllProgrammations();
             getAllRecettes();
         }
@@ -110,6 +129,14 @@ public class GestionConsultaionController implements Initializable {
             || "ASSISTANT".equals(utilisateur.getPersonnelMedical().name()))){
 
             consultationKey.setDisable(false);
+            listUtilisateur.setVisible(false);
+            listProduit.setVisible(false);
+            listproduitlabel.setVisible(false);
+            listeuserlabel.setVisible(false);
+            listRecette.setVisible(false);
+            vbRecette.setVisible(false);
+            utilisateurCB.setVisible(false);
+            produitCB.setVisible(false);
             getAllProgrammations();
             getAllConsultations();
         }else{
@@ -117,6 +144,14 @@ public class GestionConsultaionController implements Initializable {
             consultationKey.setDisable(true);
             listViewCs.setVisible(false);
             listCsLabel.setVisible(false);
+            listProduit.setVisible(false);
+            listproduitlabel.setVisible(false);
+            listeuserlabel.setVisible(false);
+            listRecette.setVisible(false);
+            vbRecette.setVisible(false);
+            listUtilisateur.setVisible(false);
+            utilisateurCB.setVisible(false);
+            produitCB.setVisible(false);
             getAllProgrammations();
         }
     }
@@ -198,8 +233,8 @@ public class GestionConsultaionController implements Initializable {
     private void getAllUser(){
 
         UserServiceImp serviceImp = new UserServiceImp();
-        //List<Utilisateur> utilisateurs = serviceImp.getAllUser();
-        List<Utilisateur> utilisateurs = serviceImp.getUtilisateurByRoleId(5);
+        List<Utilisateur> utilisateurs = serviceImp.getAllUser();
+        //List<Utilisateur> utilisateurs = serviceImp.getUtilisateurByRoleId(5);
 
         listUtilisateur.getItems().remove(0, listUtilisateur.getItems().size());
 

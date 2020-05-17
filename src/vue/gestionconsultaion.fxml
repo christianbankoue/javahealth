@@ -72,12 +72,12 @@
                   </ListView>
                </children>
             </VBox>
-            <Label layoutX="353.0" layoutY="34.0" text="Liste des produits">
+            <Label fx:id ="listproduitlabel" layoutX="353.0" layoutY="34.0" text="Liste des produits">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="700.0" layoutY="32.0" text="Liste des utilisateurs">
+            <Label fx:id="listeuserlabel" layoutX="700.0" layoutY="32.0" text="Liste des utilisateurs">
                <font>
                   <Font size="18.0" />
                </font>
