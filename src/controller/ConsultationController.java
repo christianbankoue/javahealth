@@ -166,6 +166,8 @@ public class ConsultationController implements Initializable {
 
     }
 
+
+
     public void valider(ActionEvent actionEvent) {
 
         if (validerButton.getText().equals("VALIDER")) {

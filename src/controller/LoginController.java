@@ -224,7 +224,7 @@ public class LoginController implements Initializable {
 
     }
 
-    public void sign(ActionEvent event) throws IOException {
+    public void sigIn(ActionEvent event) throws IOException {
         ((Node) event.getSource()).getScene().getWindow().hide();
         Parent root = FXMLLoader.load(getClass().getResource("./../vue/login.fxml"));
         Stage primaryStage = new Stage();
