@@ -10,6 +10,7 @@ public interface IUserService {
     Utilisateur login(String name, String prenom, String email, String password);
     List<Utilisateur> getUtilisateurByTyPeMedical(String pmedical);
     List<Utilisateur> getUtilisateurByRoleId(int roleId);
+    Utilisateur getUtilisateurById(int id);
 
     int addProgrammation(Programmation pg);
     List<Programmation> getAllProgrammation(String codePatient, String namePatient, String prenomPatient);
@@ -23,6 +24,8 @@ public interface IUserService {
 
     int addRecette(Recette recette);
     Recette getRecetteByMedecinAndDateAndPharnacien(int medecinId, int pharmacienId, java.sql.Timestamp sqlDate);
+    List<Recette> getRecettesByPharmacien(int pharmacienId);
+    int updateRecettesById(int recette_id);
     int addMaladie(Maladie maladie);
     Maladie getMaladieByConsultationId(int consultation_id);
 

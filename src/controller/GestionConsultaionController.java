@@ -6,14 +6,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Consultation;
 import model.Programmation;
+import model.Recette;
 import model.Utilisateur;
 
 import java.io.IOException;
@@ -22,9 +23,11 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class GestionConsultaionController implements Initializable {
+
 
 
     Utilisateur utilisateur;
@@ -36,27 +39,83 @@ public class GestionConsultaionController implements Initializable {
     private ListView<String> listViewPg;
 
     @FXML
+    public Label listViewPgLabel;
+
+    @FXML
     public ListView<String> listViewCs;
+
+    @FXML
+    public Label listCsLabel;
+
+    @FXML
+    public ListView<String> listRecette;
+
+    @FXML
+    public Label listRecetteLabel;
+
+    @FXML
+    public VBox vbRecette;
 
     @FXML
     public Button consultationKey;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("lll");
+
     }
 
     public void injectUtilisateur(Utilisateur utilisateur){
         this.utilisateur = utilisateur;
 
-        if(utilisateur.getRole().getIdentifiant() == 2 && "MEDECIN".equals(utilisateur.getPersonnelMedical().name())){
-            consultationKey.setDisable(false);
-            getAllProgrammations();
-            getAllConsultations();
-        }else{
+        if(utilisateur.getRole().getIdentifiant() == 4){
             consultationKey.setDisable(true);
+            listViewCs.setVisible(false);
+            listCsLabel.setVisible(false);
             getAllProgrammations();
+            getAllRecettes();
+
+        }else{
+            if(utilisateur.getRole().getIdentifiant() == 2 &&
+                ("MEDECIN".equals(utilisateur.getPersonnelMedical().name())
+                || "ASSISTANT".equals(utilisateur.getPersonnelMedical().name()))){
+
+                consultationKey.setDisable(false);
+                getAllProgrammations();
+                getAllConsultations();
+
+/*
+                listViewCs.setCellFactory(lv -> {
+                    ListCell<String> cell = new ListCell<String>() {
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setText(null);
+                            } else {
+                                setText(item.toString());
+                            }
+                        }
+                    };
+                    cell.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+                        if (event.getButton()== MouseButton.SECONDARY && (! cell.isEmpty())) {
+                            String item = cell.getItem();
+                            System.out.println("Right clicked "+item);
+                        }
+                    });
+                    return cell ;
+                });
+*/
+            }else{
+                consultationKey.setDisable(true);
+                listViewCs.setVisible(false);
+                listCsLabel.setVisible(false);
+                getAllProgrammations();
+            }
+
+            vbRecette.getChildren().remove(listRecetteLabel);
+            vbRecette.getChildren().remove(listRecette);
         }
+
     }
 
     public void programmation(ActionEvent event){
@@ -116,6 +175,23 @@ public class GestionConsultaionController implements Initializable {
 
     }
 
+    private void getAllRecettes(){
+
+        UserServiceImp serviceImp = new UserServiceImp();
+        List<Recette> recettes = serviceImp.getRecettesByPharmacien(this.utilisateur.getId());
+
+        listRecette.getItems().remove(0, listRecette.getItems().size());
+
+        recettes.stream()
+                .filter(recette ->  recette.getMedicamentDelivrer() != 1 )
+                .forEach(recette -> {
+                    Utilisateur medecin = serviceImp.getUtilisateurById(recette.getMedecin_id());
+                    listRecette.getItems().add(
+                            recette.getLabel() + " # " + recette.getRecette_id()+ " # prescrit par > "+ medecin.getName() );
+                });
+
+    }
+
     public void handleMouseClick(MouseEvent mouseEvent) {
         System.out.println("clicked on " + listViewPg.getSelectionModel().getSelectedItem());
         //158950080011374326664 - Merlin - 15/MAY/2020
@@ -162,8 +238,6 @@ public class GestionConsultaionController implements Initializable {
                 e.printStackTrace();
             }
         }
-
-
 
     }
 
@@ -213,6 +287,37 @@ public class GestionConsultaionController implements Initializable {
 
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+
+    }
+
+    public void handleMouseClickRc(MouseEvent mouseEvent) {
+        System.out.println("clicked on " + listRecette.getSelectionModel().getSelectedItem());
+
+        String selectedItem = listRecette.getSelectionModel().getSelectedItem();
+        if(selectedItem != null ){
+            String[] donnees = selectedItem.split("#");
+            String label = donnees[0].trim();
+            String id = donnees[1].trim();
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation");
+            alert.setHeaderText("La recette "+label+" va etre donne au patient");
+            alert.setContentText("Vous le confirmez?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.get() == ButtonType.OK){
+                // ... user chose OK
+                alert.close();
+                UserServiceImp serviceImp = new UserServiceImp();
+                serviceImp.updateRecettesById(Integer.parseInt(id));
+
+                getAllRecettes();
+            } else {
+                // ... user chose CANCEL or closed the dialog
+                alert.close();
             }
         }
 

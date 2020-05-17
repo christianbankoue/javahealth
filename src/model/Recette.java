@@ -12,6 +12,7 @@ public class Recette {
     private LocalDateTime date;
     private int medecin_id;
     private int pharmacien_id;
+    private int medicamentDelivrer;
 
     public Recette() {
     }
@@ -70,5 +71,13 @@ public class Recette {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public int getMedicamentDelivrer() {
+        return medicamentDelivrer;
+    }
+
+    public void setMedicamentDelivrer(int medicamentDelivrer) {
+        this.medicamentDelivrer = medicamentDelivrer;
     }
 }

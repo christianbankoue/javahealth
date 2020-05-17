@@ -8,6 +8,7 @@ import model.enums.RoleEnum;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -159,6 +160,41 @@ public class UserServiceImp implements IUserService {
             ex.printStackTrace();
         }
         return utilisateurs;
+    }
+
+    public Utilisateur getUtilisateurById(int id){
+
+        String sql = "SELECT * FROM USERCOMPTES WHERE usercompte_id = ? ";
+
+        Utilisateur utilisateur = new Utilisateur();
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setInt(1, id);
+
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+                String codeUnique = rs.getString("codeUnique");
+                String pmedical = rs.getString("pmedical");
+                int roleId = rs.getInt("role_id");
+                String name = rs.getString("name");
+                String prenom = rs.getString("prenom");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+
+                utilisateur = new Utilisateur(id, name, prenom, email, password, codeUnique);
+                utilisateur.setRole(RoleEnum.getRoleById(roleId));
+                if(pmedical != null){
+                    utilisateur.setPersonnelMedical(PersonnelMedicalEnum.valueOf(pmedical));
+                }
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return utilisateur;
     }
 
     public int addProgrammation(Programmation pg) {
@@ -523,6 +559,63 @@ public class UserServiceImp implements IUserService {
         }
 
         return recette;
+    }
+
+    public List<Recette> getRecettesByPharmacien(int pharmacienId){
+
+        String sql = "SELECT * FROM RECETTES WHERE " +
+                "pharmacien_id = ? ";
+
+        List<Recette> recettes = new ArrayList<>();
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setInt(1,pharmacienId);
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+                int recette_id = rs.getInt("recette_id");
+                int medicamentDelivrer = rs.getInt("medicamentDelivrer");
+                int medecinId = rs.getInt("medecin_id");
+                String label = rs.getString("label");
+                String detail = rs.getString("detail");
+                Timestamp dateTime = rs.getTimestamp("date");
+
+                LocalDateTime date = dateTime.toLocalDateTime();
+
+                Recette recette = new Recette(label, detail, medecinId, pharmacienId, date);
+                recette.setRecette_id(recette_id);
+                recette.setMedicamentDelivrer(medicamentDelivrer);
+
+                recettes.add(recette);
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+
+        return recettes;
+    }
+
+    public int updateRecettesById(int recette_id){
+
+        String sql = "UPDATE RECETTES SET medicamentDelivrer = 1 WHERE " +
+                "recette_id = ? ";
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setInt(1,recette_id);
+            int rs = db.executeMaj();
+            return rs;
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return 0;
     }
 
     public int addMaladie(Maladie maladie){
