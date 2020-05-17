@@ -776,4 +776,38 @@ public class UserServiceImp implements IUserService {
         }
         return 0;
     }
+
+    @Override
+    public Recette getRecetteById(int recette_id) {
+        String sql = "SELECT * FROM RECETTES WHERE recette_id = ? ";
+
+        Recette recette = new Recette();
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            pstm.setInt(1, recette_id);
+
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+                String label = rs.getString("label");
+                String detail = rs.getString("detail");
+                int medecin_id = rs.getInt("medecin_id");
+                int pharmacien_id = rs.getInt("pharmacien_id");
+                int produit_id = rs.getInt("produit_id");
+                int medicamentDelivrer = rs.getInt("medicamentDelivrer");
+
+                recette = new Recette(label, detail, medecin_id, pharmacien_id, produit_id, null);
+                recette.setMedicamentDelivrer(medicamentDelivrer);
+
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return recette;
+    }
 }

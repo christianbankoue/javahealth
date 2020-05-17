@@ -34,4 +34,5 @@ public interface IUserService {
     List<Produit> getAllProduit();
     int deleteProduit(int produit_id);
 
+    Recette getRecetteById(int recette_id);
 }

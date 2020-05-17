@@ -176,7 +176,8 @@ public class GestionConsultaionController implements Initializable {
                         programmation.getDate().getYear();
 
                 Long epoque = (programmation.getDate().toLocalDate().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
-                String key = String.valueOf(epoque +""+ programmation.getProgrammation_id() +""+ String.valueOf(epoque).hashCode());
+                String epoqueStr = epoque.toString().substring(0, 7);
+                String key = epoqueStr +""+ programmation.getProgrammation_id() +"@@"+ String.valueOf(epoque).hashCode();
                 listViewPg.getItems().add(
                         key +" # "+ programmation.getNamePatient() + " # " +date);
             });
@@ -205,7 +206,9 @@ public class GestionConsultaionController implements Initializable {
                     consultation.getDateVisite().getYear();
 
             Long epoque = (consultation.getDateVisite().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
-            String key = String.valueOf(epoque +""+ consultation.getConsultation_id() +""+ String.valueOf(epoque).hashCode());
+            String epoqueStr = epoque.toString().substring(0, 7);
+
+            String key = epoqueStr +""+ consultation.getConsultation_id() +"@@"+ String.valueOf(epoque).hashCode();
 
             listViewCs.getItems().add(
                     key +" # "+ consultation.getNamePatient() +" # "+ consultation.getNameMedecin() + " # " +date);
@@ -295,9 +298,10 @@ public class GestionConsultaionController implements Initializable {
             LocalDate l = LocalDate.of(Integer.parseInt(year), Month.valueOf(month), Integer.parseInt(day));
 
             Long epoque = (l.atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
+            String epoqueStr = epoque.toString().substring(0, 7);
 
-            String[] keySplited = key.split(String.valueOf(epoque));
-            int programmation_id = Integer.parseInt(keySplited[1].substring(0,1));
+            String[] keySplited = key.split(epoqueStr);
+            int programmation_id = Integer.parseInt(keySplited[1].split("@@")[0]);
 
             UserServiceImp serviceImp = new UserServiceImp();
             Programmation programmation = serviceImp.getProgrammation(programmation_id);
@@ -347,9 +351,10 @@ public class GestionConsultaionController implements Initializable {
             LocalDate l = LocalDate.of(Integer.parseInt(year), Month.valueOf(month), Integer.parseInt(day));
 
             Long epoque = (l.atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
+            String epoqueStr = epoque.toString().substring(0, 7);
 
-            String[] keySplited = key.split(String.valueOf(epoque));
-            int consultation_id = Integer.parseInt(keySplited[1].substring(0,1));
+            String[] keySplited = key.split(epoqueStr);
+            int consultation_id = Integer.parseInt(keySplited[1].split("@@")[0]);
 
             UserServiceImp serviceImp = new UserServiceImp();
             Consultation consultation = serviceImp.getConsultationById(consultation_id);

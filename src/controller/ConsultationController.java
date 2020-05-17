@@ -17,6 +17,7 @@ import java.time.Month;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ConsultationController implements Initializable {
@@ -107,7 +108,31 @@ public class ConsultationController implements Initializable {
         description.setText(maladie.getDescription());
         maladieLabel.setText(maladie.getNom());
 
+        Recette recette = serviceImp.getRecetteById(maladie.getRecette_id());
+        recetteLabel.setText(recette.getLabel());
+        recetteDescription.setText(recette.getDetail());
+
+
+        Optional<Utilisateur> utilisateurOpt = pharmaciens.stream()
+                .filter(pharmacien -> recette.getPharmacien_id() == pharmacien.getId())
+        .findFirst();
+        pharmacienSelected.setText( utilisateurOpt.isPresent() ?
+                utilisateurOpt.get().getCodeUnique() + " - " + utilisateurOpt.get().getPrenom() + " - "  + utilisateurOpt.get().getName() : "" );
+        pharmacienSelected.setDisable(true);
+
+        Optional<Produit> produitOpt = produits.stream()
+                .filter(produit -> recette.getProduit_id() == produit.getProduit_id())
+                .findFirst();
+        produitSelected.setText( produitOpt.isPresent() ? produitOpt.get().getLabel() : "" );
+        produitSelected.setDisable(true);
+
         codePatient = consultation.getCodeUniquePatient();
+
+        maladieLabel.setDisable(false);
+        description.setDisable(false);
+        recetteLabel.setDisable(false);
+        recetteDescription.setDisable(false);
+
         validerButton.setDisable(false);
         validerButton.setText("OK");
     }
@@ -124,7 +149,8 @@ public class ConsultationController implements Initializable {
                     programmation.getDate().getYear();
 
             Long epoque = (programmation.getDate().toLocalDate().atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
-            String key = String.valueOf(epoque + "" + programmation.getProgrammation_id() + "" + String.valueOf(epoque).hashCode());
+            String epoqueStr = epoque.toString().substring(0, 7);
+            String key = epoqueStr + "" + programmation.getProgrammation_id() + "@@" + String.valueOf(epoque).hashCode();
             listViewPg.getItems().add(
                     key + " # " + programmation.getNamePatient() + " # " + date);
         });
@@ -153,9 +179,10 @@ public class ConsultationController implements Initializable {
         LocalDate l = LocalDate.of(Integer.parseInt(year), Month.valueOf(month), Integer.parseInt(day));
 
         Long epoque = (l.atStartOfDay().toInstant(ZoneOffset.UTC)).getEpochSecond();
+        String epoqueStr = epoque.toString().substring(0, 7);
 
-        String[] keySplited = key.split(String.valueOf(epoque));
-        int programmation_id = Integer.parseInt(keySplited[1].substring(0, 1));
+        String[] keySplited = key.split(epoqueStr);
+        int programmation_id = Integer.parseInt(keySplited[1].split("@@")[0]);
 
         UserServiceImp serviceImp = new UserServiceImp();
         Programmation programmation = serviceImp.getProgrammation(programmation_id);
@@ -165,8 +192,6 @@ public class ConsultationController implements Initializable {
         codePatient = programmation.getCodePatient();
 
     }
-
-
 
     public void valider(ActionEvent actionEvent) {
 

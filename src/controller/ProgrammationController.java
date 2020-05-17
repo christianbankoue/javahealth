@@ -78,7 +78,9 @@ public class ProgrammationController implements Initializable {
     public void injectUtilisateur(Utilisateur utilisateur){
         this.utilisateur = utilisateur;
         nametxt.setText(utilisateur.getName());
+        nametxt.setDisable(true);
         prenomtxt.setText(utilisateur.getPrenom());
+        prenomtxt.setDisable(true);
     }
 
     public void injectProgrammation(String name, String prenom, String domaineMedical, String medecinFullName, String hospital, LocalDateTime date){
