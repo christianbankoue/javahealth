@@ -504,8 +504,8 @@ public class UserServiceImp implements IUserService {
 
     public int addRecette(Recette recette){
         String sql = "INSERT INTO RECETTES " +
-                "(label, detail, medecin_id, pharmacien_id, date)" +
-                " values (?,?,?,?,?) ";
+                "(label, detail, medecin_id, pharmacien_id, produit_id, date)" +
+                " values (?,?,?,?,?,?) ";
 
         try{
             db.initPrepar(sql);
@@ -514,8 +514,9 @@ public class UserServiceImp implements IUserService {
             pstm.setString(2,recette.getDetail());
             pstm.setInt(3,recette.getMedecin_id());
             pstm.setInt(4,recette.getPharmacien_id());
+            pstm.setInt(5,recette.getProduit_id());
             java.sql.Timestamp sqlDate = java.sql.Timestamp.valueOf(recette.getDate());
-            pstm.setTimestamp(5,sqlDate);
+            pstm.setTimestamp(6,sqlDate);
 
             int rs = db.executeMaj();
             return rs;
@@ -546,10 +547,11 @@ public class UserServiceImp implements IUserService {
             while (rs.next()) {
 
                 int recette_id = rs.getInt("recette_id");
+                int produit_id = rs.getInt("produit_id");
                 String label = rs.getString("label");
                 String detail = rs.getString("detail");
 
-                recette = new Recette(label, detail, medecinId, pharmacienId, sqlDate.toLocalDateTime());
+                recette = new Recette(label, detail, medecinId, pharmacienId, produit_id, sqlDate.toLocalDateTime());
                 recette.setRecette_id(recette_id);
             }
 
@@ -576,6 +578,7 @@ public class UserServiceImp implements IUserService {
 
             while (rs.next()) {
                 int recette_id = rs.getInt("recette_id");
+                int produit_id = rs.getInt("produit_id");
                 int medicamentDelivrer = rs.getInt("medicamentDelivrer");
                 int medecinId = rs.getInt("medecin_id");
                 String label = rs.getString("label");
@@ -584,7 +587,7 @@ public class UserServiceImp implements IUserService {
 
                 LocalDateTime date = dateTime.toLocalDateTime();
 
-                Recette recette = new Recette(label, detail, medecinId, pharmacienId, date);
+                Recette recette = new Recette(label, detail, medecinId, pharmacienId, produit_id, date);
                 recette.setRecette_id(recette_id);
                 recette.setMedicamentDelivrer(medicamentDelivrer);
 
@@ -671,5 +674,35 @@ public class UserServiceImp implements IUserService {
         }
 
         return maladie;
+    }
+
+    public List<Produit> getAllProduit(){
+
+        String sql = "SELECT * FROM PRODUITS ";
+
+        List<Produit> produits = new ArrayList<>();
+
+        try{
+            db.initPrepar(sql);
+            PreparedStatement pstm = db.getPstm();
+            ResultSet rs = db.executeSelect();
+
+            while (rs.next()) {
+                int produit_id = rs.getInt("produit_id");
+                String label = rs.getString("label");
+                String detail = rs.getString("detail");
+
+
+                Produit produit = new Produit(label, detail);
+                produit.setProduit_id(produit_id);
+                produits.add(produit);
+            }
+
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return produits;
     }
 }

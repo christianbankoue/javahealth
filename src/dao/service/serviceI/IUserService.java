@@ -29,4 +29,6 @@ public interface IUserService {
     int addMaladie(Maladie maladie);
     Maladie getMaladieByConsultationId(int consultation_id);
 
+    List<Produit> getAllProduit();
+
 }

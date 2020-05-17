@@ -35,11 +35,15 @@ public class ConsultationController implements Initializable {
     public TextArea recetteDescription;
     public TextField pharmacienSelected;
 
+    public TextField produitSelected;
+
     @FXML
     private ListView<String> listViewPg;
 
     @FXML
     public SplitMenuButton pharmacienList;
+
+    public SplitMenuButton produitList;
 
     Utilisateur medecinUser;
     List<Programmation> pgs;
@@ -47,6 +51,10 @@ public class ConsultationController implements Initializable {
     Utilisateur pharmacienValue;
 
     List<Utilisateur> pharmaciens = new ArrayList<>();
+
+
+    Produit produitValue;
+    List<Produit> produits = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,6 +75,18 @@ public class ConsultationController implements Initializable {
             });
             pharmacienList.getItems().add(choice);
         });
+
+
+        produits = serviceImp.getAllProduit();
+        produits.forEach(produit -> {
+            MenuItem choice = new MenuItem(produit.getLabel());
+            choice.setOnAction((e)-> {
+                produitValue = produit;
+                produitSelected.setText(choice.getText());
+            });
+            produitList.getItems().add(choice);
+        });
+
     }
 
     public void injectUtilisateur(Utilisateur medecinUser, Consultation consultation) {
@@ -155,7 +175,8 @@ public class ConsultationController implements Initializable {
                     && nomPatient.getText() != null && nomPatient.getText().length() > 0
                     && prenomPatient.getText() != null && prenomPatient.getText().length() > 0
                     && recetteLabel.getText() != null && recetteLabel.getText().length() > 0
-                    && pharmacienSelected.getText() != null && pharmacienSelected.getText().length() > 0) {
+                    && pharmacienSelected.getText() != null && pharmacienSelected.getText().length() > 0
+                    && produitSelected.getText() != null && produitSelected.getText().length() > 0) {
 
 
                 LocalDate now = LocalDate.now();
@@ -178,7 +199,7 @@ public class ConsultationController implements Initializable {
 
                 //On sauvegarde la recette
                 Recette recette = new Recette(recetteLabel.getText(), recetteDescription.getText(),
-                        medecinUser.getId(), pharmacienValue.getId(), now.atTime(hour, min));
+                        medecinUser.getId(), pharmacienValue.getId(), produitValue.getProduit_id(), now.atTime(hour, min));
                 serviceImp.addRecette(recette);
 
                 Recette recetteSaved = serviceImp.getRecetteByMedecinAndDateAndPharnacien(medecinUser.getId(), pharmacienValue.getId(), java.sql.Timestamp.valueOf(recette.getDate()));

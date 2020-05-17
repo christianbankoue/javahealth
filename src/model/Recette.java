@@ -13,14 +13,16 @@ public class Recette {
     private int medecin_id;
     private int pharmacien_id;
     private int medicamentDelivrer;
+    private int produit_id;
 
     public Recette() {
     }
 
-    public Recette(String label, String detail, int medecin_id, int pharmacien_id, LocalDateTime date) {
+    public Recette(String label, String detail, int medecin_id, int pharmacien_id, int produit_id, LocalDateTime date) {
         this.label = label;
         this.detail = detail;
         this.medecin_id = medecin_id;
+        this.produit_id = produit_id;
         this.pharmacien_id = pharmacien_id;
         this.date = date;
     }
@@ -79,5 +81,13 @@ public class Recette {
 
     public void setMedicamentDelivrer(int medicamentDelivrer) {
         this.medicamentDelivrer = medicamentDelivrer;
+    }
+
+    public int getProduit_id() {
+        return produit_id;
+    }
+
+    public void setProduit_id(int produit_id) {
+        this.produit_id = produit_id;
     }
 }
