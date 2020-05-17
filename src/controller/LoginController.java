@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -38,6 +39,8 @@ public class LoginController implements Initializable {
     private TextField codeutxt;
     @FXML
     private TextField role;
+    @FXML
+    private Label erreur;
 
     private RoleEnum roleEnum = RoleEnum.INEXISTANT;
     private PersonnelMedicalEnum personnelMedical = PersonnelMedicalEnum.MEDECIN;
@@ -45,7 +48,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+    erreur.setVisible(false);
     }
 
     @FXML
@@ -119,6 +122,7 @@ public class LoginController implements Initializable {
         }else{
             // label erreur login
             // isUserConnected.setText("Erreur login verifier vos informations");
+            erreur.setVisible(true);
         }
 
     }
@@ -130,61 +134,64 @@ public class LoginController implements Initializable {
         String email = emailtxt.getText();
         String password = passwordtxt.getText();
         String codeUnique = codeutxt.getText();
-        String roleUtilisateur  = role.getText();
-        String pMedical  = personnelMedical.name();
 
-        UserCompte userCompte = new UserCompte(name, prenom, email, password, codeUnique);
 
-        if (roleEnum.getIdentifiant()== 1)
-            userCompte.setAdmin(true);
-        else if(roleEnum.getIdentifiant() == 2 ){
-            userCompte.setPersonnelmedicale(true);
-            if(personnelMedical.name().equals(PersonnelMedicalEnum.ASSISTANT.name())){
-                userCompte.setTypePersonnelMedical("ASSISTANT");
-            }else if(personnelMedical.name().equals(PersonnelMedicalEnum.MEDECIN.name())){
-                userCompte.setTypePersonnelMedical("MEDECIN");
-            }else if(personnelMedical.name().equals(PersonnelMedicalEnum.INFIRMIERE.name())){
-                userCompte.setTypePersonnelMedical("INFIRMIERE");
+        if(name.length()>0 && prenom.length()>0 && email.length()>0 && password.length() >0 && codeUnique.length()>0 && !roleEnum.name().equals(RoleEnum.INEXISTANT.name())) {
+            UserCompte userCompte = new UserCompte(name, prenom, email, password, codeUnique);
+
+            if (roleEnum.getIdentifiant() == 1)
+                userCompte.setAdmin(true);
+            else if (roleEnum.getIdentifiant() == 2) {
+                userCompte.setPersonnelmedicale(true);
+                if (personnelMedical.name().equals(PersonnelMedicalEnum.ASSISTANT.name())) {
+                    userCompte.setTypePersonnelMedical("ASSISTANT");
+                } else if (personnelMedical.name().equals(PersonnelMedicalEnum.MEDECIN.name())) {
+                    userCompte.setTypePersonnelMedical("MEDECIN");
+                } else if (personnelMedical.name().equals(PersonnelMedicalEnum.INFIRMIERE.name())) {
+                    userCompte.setTypePersonnelMedical("INFIRMIERE");
+                }
+            } else if (roleEnum.getIdentifiant() == 3)
+                userCompte.setFournisseur(true);
+            else if (roleEnum.getIdentifiant() == 4)
+                userCompte.setPharmatien(true);
+            else if (roleEnum.getIdentifiant() == 5)
+                userCompte.setPatient(true);
+
+
+            UserServiceImp userService = new UserServiceImp();
+
+            int resultat = userService.signUp(userCompte);
+
+            System.out.println(resultat);
+
+            Utilisateur utilisateur = userService.login(name, prenom, email, password);
+
+            System.out.println(utilisateur);
+
+            if (resultat > 0) {
+                try {
+                    ((Node) event.getSource()).getScene().getWindow().hide();
+
+                    Stage gestionconsultaionStage = new Stage();
+                    FXMLLoader loader = new FXMLLoader();
+                    Pane root = loader.load(getClass().getResource("./../vue/gestionconsultaion.fxml").openStream());
+
+                    GestionConsultaionController gcc = (GestionConsultaionController) loader.getController();
+                    gcc.injectUtilisateur(utilisateur);
+
+                    Scene scene = new Scene(root);
+                    gestionconsultaionStage.setScene(scene);
+                    gestionconsultaionStage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // label erreur signUp
+                // isUserConnected.setText("Erreur signUp verifier vos informations");
+                erreur.setVisible(true);
             }
-        }
-        else if(roleEnum.getIdentifiant() == 3 )
-            userCompte.setFournisseur(true);
-        else if(roleEnum.getIdentifiant() == 4 )
-            userCompte.setPharmatien(true);
-        else if(roleEnum.getIdentifiant() == 5 )
-            userCompte.setPatient(true);
-
-
-        UserServiceImp userService = new UserServiceImp();
-
-        int resultat = userService.signUp(userCompte);
-
-        System.out.println(resultat);
-
-        Utilisateur utilisateur = userService.login(name, prenom, email, password);
-
-        System.out.println(utilisateur);
-
-        if(resultat > 0){
-            try {
-                ((Node)event.getSource()).getScene().getWindow().hide();
-
-                Stage gestionconsultaionStage = new Stage();
-                FXMLLoader loader = new FXMLLoader();
-                Pane root = loader.load(getClass().getResource("./../vue/gestionconsultaion.fxml").openStream());
-
-                GestionConsultaionController gcc =  (GestionConsultaionController)loader.getController();
-                gcc.injectUtilisateur(utilisateur);
-
-                Scene scene = new Scene(root);
-                gestionconsultaionStage.setScene(scene);
-                gestionconsultaionStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else{
-            // label erreur signUp
-            // isUserConnected.setText("Erreur signUp verifier vos informations");
+        }else {
+            erreur.setVisible(true);
         }
     }
 
@@ -193,33 +200,38 @@ public class LoginController implements Initializable {
         String prenom = prenomtxt.getText();
         String email = emailtxt.getText();
         String password = passwordtxt.getText();
+        if(name.length()>0 && prenom.length()>0 && email.length()>0 && password.length() >0 ) {
 
-        UserServiceImp userService = new UserServiceImp();
+            UserServiceImp userService = new UserServiceImp();
 
-        Utilisateur utilisateur = userService.login(name, prenom, email, password);
+            Utilisateur utilisateur = userService.login(name, prenom, email, password);
 
-        System.out.println(utilisateur);
+            System.out.println(utilisateur);
 
-        if(utilisateur.getCodeUnique() != null){
-            try {
-                ((Node)event.getSource()).getScene().getWindow().hide();
+            if (utilisateur.getCodeUnique() != null) {
+                try {
+                    ((Node) event.getSource()).getScene().getWindow().hide();
 
-                Stage gestionconsultaionStage = new Stage();
-                FXMLLoader loader = new FXMLLoader();
-                Pane root = loader.load(getClass().getResource("./../vue/gestionconsultaion.fxml").openStream());
+                    Stage gestionconsultaionStage = new Stage();
+                    FXMLLoader loader = new FXMLLoader();
+                    Pane root = loader.load(getClass().getResource("./../vue/gestionconsultaion.fxml").openStream());
 
-                GestionConsultaionController gcc =  (GestionConsultaionController)loader.getController();
-                gcc.injectUtilisateur(utilisateur);
+                    GestionConsultaionController gcc = (GestionConsultaionController) loader.getController();
+                    gcc.injectUtilisateur(utilisateur);
 
-                Scene scene = new Scene(root);
-                gestionconsultaionStage.setScene(scene);
-                gestionconsultaionStage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
+                    Scene scene = new Scene(root);
+                    gestionconsultaionStage.setScene(scene);
+                    gestionconsultaionStage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // label erreur login
+                // isUserConnected.setText("Erreur login verifier vos informations");
+                erreur.setVisible(true);
             }
-        }else{
-            // label erreur login
-            // isUserConnected.setText("Erreur login verifier vos informations");
+        }else {
+            erreur.setVisible(true);
         }
 
     }
@@ -230,6 +242,7 @@ public class LoginController implements Initializable {
         Stage primaryStage = new Stage();
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
     }
 
     public void connect(ActionEvent event) throws IOException {
