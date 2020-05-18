@@ -89,6 +89,8 @@ public class GestionConsultaionController implements Initializable {
         //si l utilisateur est admin
         if(utilisateur.getRole().getIdentifiant() == 1){
             consultationKey.setDisable(true);
+            listViewCs.setVisible(false);
+            listCsLabel.setVisible(false);
 
             System.out.println("L'utilisateur est un admin");
             getAllUser();
@@ -96,20 +98,21 @@ public class GestionConsultaionController implements Initializable {
         }
         //si l utilisateur est fournisseur
         else if(utilisateur.getRole().getIdentifiant() == 3){
-            consultationKey.setDisable(true);
+            consultationKey.setDisable(false);
             listViewCs.setVisible(false);
             listCsLabel.setVisible(false);
             listRecette.setVisible(false);
             listeuserlabel.setVisible(false);
             listUtilisateur.setVisible(false);
             utilisateurCB.setVisible(false);
+            vbRecette.setVisible(false);
 
 
             System.out.println("L'utilisateur est un fournisseur");
         }
         //si l utilisateur est un pharmacien
         else if(utilisateur.getRole().getIdentifiant() == 4){
-            consultationKey.setDisable(true);
+            consultationKey.setDisable(false);
             listViewCs.setVisible(false);
             listCsLabel.setVisible(false);
             listUtilisateur.setVisible(false);
@@ -141,7 +144,7 @@ public class GestionConsultaionController implements Initializable {
             getAllConsultations();
         }else{
             //si l utilisateur est un autre type (Patient)
-            consultationKey.setDisable(true);
+            consultationKey.setDisable(false);
             listViewCs.setVisible(false);
             listCsLabel.setVisible(false);
             listProduit.setVisible(false);
